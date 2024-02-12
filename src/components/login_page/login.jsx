@@ -1,15 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { Link, Navigate } from "react-router-dom";
 import logo3 from "../../Assets/Welcome page/logo4.svg";
 import login from "../../Assets/Welcome page/login.png";
 import logo from "../../Assets/Welcome page/thinking.svg";
-import email from "../../Assets/Welcome page/material-symbols_mail-outline.png";
+import email2 from "../../Assets/Welcome page/material-symbols_mail-outline.png";
 import key from "../../Assets/Welcome page/carbon_password.png";
 import eye from "../../Assets/Welcome page/el_eye-close (1).png";
 import eye_open from "../../Assets/Welcome page/eye-open2.svg";
 import "./login.css";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { UserContext } from "../usercontext";
 
 export const Login = () => {
+  const [isEmailFocused, setIsEmailFocused] = useState(false);
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const [email, setemail] = useState("");
+  const [password, setpassword] = useState("");
+  const [redirect, setredirect] = useState(false);
+
+  const { setuser } = useContext(UserContext);
+
   function togglePasswordVisibility() {
     const passwordInput = document.getElementById("password");
     const eyeIcon = document.getElementById("eyeIcon");
@@ -21,8 +31,6 @@ export const Login = () => {
       eyeIcon.src = eye;
     }
   }
-  const [isEmailFocused, setIsEmailFocused] = useState(false);
-  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
   const handleEmailFocus = () => {
     setIsEmailFocused(true);
@@ -35,6 +43,32 @@ export const Login = () => {
   const handlePasswordFocus = () => {
     setIsPasswordFocused(true);
   };
+
+  const handlelogin = async (ev) => {
+    ev.preventDefault();
+    try {
+      console.log("try box")
+      const { data } = await axios.post("/login", {
+        email,
+        password,
+      });
+      setuser(data); //taking the data of the response generated in Componenets
+      alert("Login successful");
+      setredirect(true);
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        alert("Invalid login credentials");
+      } else if (error.response && error.response.status === 404) {
+        alert("User not found with the provided email");
+      } else {
+        alert("Login failed");
+      }
+    }
+  };
+
+  if (redirect) {
+    return <Navigate to={"/course"} />;
+  }
 
   return (
     <div className="login">
@@ -71,14 +105,22 @@ export const Login = () => {
             <img src={logo} alt="logo" />
           </div>
           <div className="login__form-details">
-            <form>
+            <form onSubmit={handlelogin}>
               <div
                 className={`login__form-input ${
                   isEmailFocused ? "focused" : ""
                 }`}
               >
-                <img src={email} alt="email" />
-                <input type="email" onFocus={handleEmailFocus} />
+                <img src={email2} alt="email" />
+                <input
+                  value={email}
+                  type="email"
+                  onFocus={handleEmailFocus}
+                  onChange={(e) => {
+                    handleInputChange(e, setIsEmailFocused);
+                    setemail(e.target.value);
+                  }}
+                />
                 <label>E-mail</label>
               </div>
 
@@ -89,27 +131,32 @@ export const Login = () => {
               >
                 <img src={key} alt="key" />
                 <input
+                  value={password}
                   type="password"
                   id="password"
                   onFocus={handlePasswordFocus}
-                  onChange={(e) => handleInputChange(e, setIsEmailFocused)}
+                  onChange={(e) => {
+                    handleInputChange(e, setIsPasswordFocused);
+                    setpassword(e.target.value);
+                  }}
                 />
-                <label>Password</label>
+                <label className={isPasswordFocused ? "focused" : ""}>
+                  Password
+                </label>
                 <img
                   className="eye"
                   src={eye}
                   alt="eye"
                   id="eyeIcon"
                   onClick={togglePasswordVisibility}
-                  onChange={(e) => handleInputChange(e, setIsPasswordFocused)}
                 />
               </div>
 
-              <Link to="/course">
-                <button className="login__form-button">
-                  <span class="text ">Continue</span>
-                </button>
-              </Link>
+              {/* <Link to="/course"> */}
+              <button className="login__form-button" type="submit">
+                <span class="text ">Continue</span>
+              </button>
+              {/* </Link> */}
             </form>
             <Link to="/register" className="login_change">
               ------- <span>Need an Account ?</span> -------

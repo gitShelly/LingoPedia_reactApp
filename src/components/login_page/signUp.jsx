@@ -2,20 +2,80 @@ import React, { useState } from "react";
 import logo3 from "../../Assets/Welcome page/logo4.svg";
 import login from "../../Assets/Welcome page/signup.png";
 import logo from "../../Assets/Welcome page/thinking.svg";
-import email from "../../Assets/Welcome page/material-symbols_mail-outline.png";
+import email2 from "../../Assets/Welcome page/material-symbols_mail-outline.png";
 import key from "../../Assets/Welcome page/carbon_password.png";
 import eye from "../../Assets/Welcome page/el_eye-close (1).png";
 import eye_open from "../../Assets/Welcome page/eye-open2.svg";
-import user from "../../Assets/Welcome page/user.png"
+import user from "../../Assets/Welcome page/user.png";
 import "./login.css";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import axios from "axios";
 
 export const Register = () => {
-
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isNameFocused, setIsNameFocused] = useState(false);
 
+  const [name, setname] = useState("");
+  const [email, setemail] = useState("");
+  const [password, setpassword] = useState("");
+  const [redirect, setredirect] = useState(false);
+  const [message, setmessage] = useState("");
+
+  const validpassword = (password) => {
+    let valid = true;
+    let message = "";
+    if (password.length < 8) {
+      message="Passwords must be at least 8 characters.";
+      valid = false;
+    } else if (password.length > 15) {
+      message="Passwords cannot be more than 15 characters.";
+      valid = false;
+    } else if (!/\d/.test(password)) {
+      message="Passwords must contain at least one number.";
+      valid = false;
+    } else if (!/[a-z]/.test(password)) {
+      message="Passwords must contain at least one lowercase letter.";
+      valid = false;
+    } else if (!/[A-Z]/.test(password)) {
+      message="Passwords must contain at least one uppercase letter.";
+      valid = false;
+    } else if (!/[!@#$%&*()-+=^]/.test(password)) {
+      message=
+        "Passwords must contain at least one special character (!@#$%&*()-+=^)."
+      ;
+      valid = false;
+    } else if (/\s/.test(password)) {
+      message="Passwords cannot contain whitespace.";
+      valid = false;
+    }
+    setmessage(message);
+    return valid;
+  };
+
+  const registerUser = async (ev) => {
+    const isValidPassword = validpassword(password);
+    ev.preventDefault(); //so the page does not get reloaded on the event change
+    if (isValidPassword) {
+      try {
+        await axios.post("/register", {
+          name,
+          email,
+          password,
+        });
+        alert("You are now a registered user.");
+        setredirect(true);
+      } catch (error) {
+        if (error.response && error.response.status === 400) {
+          alert("Registration failed. The email is already in use.");
+        } else {
+          alert("Registration failed.");
+        }
+      }
+    } else {
+      alert(message);
+    }
+  };
 
   function togglePasswordVisibility() {
     setIsPasswordFocused(true);
@@ -47,6 +107,9 @@ export const Register = () => {
     const inputValue = event.target.value;
     setState(inputValue.length > 0);
   };
+  if (redirect) {
+    return <Navigate to={"/language"} />;
+  }
 
   return (
     <div className="login">
@@ -83,7 +146,7 @@ export const Register = () => {
             <img src={logo} alt="logo" />
           </div>
           <div className="login__form-details">
-            <form>
+            <form onSubmit={registerUser}>
               <div
                 className={`login__form-input ${
                   isNameFocused ? "focused" : ""
@@ -91,7 +154,11 @@ export const Register = () => {
               >
                 <img src={user} alt="email" />
                 <input
-                  onChange={(e) => handleInputChange(e, setIsNameFocused)}
+                  onChange={(e) => {
+                    handleInputChange(e, setIsNameFocused);
+                    setname(e.target.value);
+                  }}
+                  value={name}
                   type="text"
                   id="Name"
                   onFocus={handleNameFocus}
@@ -103,11 +170,15 @@ export const Register = () => {
                   isEmailFocused ? "focused" : ""
                 }`}
               >
-                <img src={email} alt="email" />
+                <img src={email2} alt="email" />
                 <input
+                  value={email}
                   type="email"
                   onFocus={handleEmailFocus}
-                  onChange={(e) => handleInputChange(e, setIsEmailFocused)}
+                  onChange={(e) => {
+                    handleInputChange(e, setIsEmailFocused);
+                    setemail(e.target.value);
+                  }}
                 />
                 <label>E-mail</label>
               </div>
@@ -119,10 +190,14 @@ export const Register = () => {
               >
                 <img src={key} alt="key" />
                 <input
+                  value={password}
                   type="password"
                   id="password"
                   onFocus={handlePasswordFocus}
-                  onChange={(e) => handleInputChange(e, setIsPasswordFocused)}
+                  onChange={(e) => {
+                    handleInputChange(e, setIsPasswordFocused);
+                    setpassword(e.target.value);
+                  }}
                 />
                 <label className={isPasswordFocused ? "focused" : ""}>
                   Password
@@ -135,12 +210,13 @@ export const Register = () => {
                   onClick={togglePasswordVisibility}
                 />
               </div>
+              <span className="pass_format">Password format</span>
 
-              <Link to="/language">
-                <button className="login__form-button">
-                  <span class="text ">Explore</span>
-                </button>
-              </Link>
+              {/* <Link to="/language"> */}
+              <button className="login__form-button" type="submit">
+                <span class="text ">Explore</span>
+              </button>
+              {/* </Link> */}
             </form>
             <Link to="/login" className="login_change">
               ------- <span>Already an Account</span> -------

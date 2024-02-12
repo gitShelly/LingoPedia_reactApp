@@ -16,8 +16,10 @@ import {Upload} from './upload_page/upload';
 import {Register} from "./login_page/signUp"
 import {Login} from "./login_page/login"
 import { LangProvider } from '../langProvider.js';
+import axios from "axios"
 
-
+axios.defaults.baseURL = "http://localhost:4000";
+axios.defaults.withCredentials = true;
 
 export const App = () => {
   return (
