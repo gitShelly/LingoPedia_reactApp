@@ -7,18 +7,17 @@ const jwtSecret = process.env.JWTSECRET;
 
 const LoginRequest = async (req, res) => {
   const { email, password } = req.body;
-  console.log(email, password);
+  // console.log(email, password);
 
   try {
     const userdoc = await User.findOne({ email });
-    // console.log(userdoc);
-
+    
     if (!userdoc) {
       return res.status(404).json({ message: "User not found" });
     }
-
+    
     const passOk = bcrypt.compareSync(password, userdoc.password);
-
+    
     if (passOk) {
       jwt.sign(
         { email: userdoc.email, id: userdoc._id, name: userdoc.name },
@@ -28,8 +27,9 @@ const LoginRequest = async (req, res) => {
           if (err) throw err;
           res.cookie("token", token).json(userdoc);
         }
-      );
-    } else {
+        );
+      } else {
+      console.log(passOk);
       res.status(401).json({ message: "Incorrect password" });
     }
   } catch (error) {

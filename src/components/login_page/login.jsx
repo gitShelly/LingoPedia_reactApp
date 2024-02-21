@@ -47,12 +47,12 @@ export const Login = () => {
   const handlelogin = async (ev) => {
     ev.preventDefault();
     try {
-      console.log("try box")
-      const { data } = await axios.post("/login", {
+      const {data} = await axios.post("/login", {
         email,
         password,
       });
-      setuser(data); //taking the data of the response generated in Componenets
+
+      setuser(data);
       alert("Login successful");
       setredirect(true);
     } catch (error) {

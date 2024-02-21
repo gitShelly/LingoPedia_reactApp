@@ -45,7 +45,7 @@ export const QuizData = [
       {
         question: 'what is the Japanese word for "HELLO"?',
         options: [" Konnichiwa", " Sayonara ", " Ohayou ", "Arigatou"],
-        answer: 1,
+        answer:1,
       },
       {
         question: 'What does the phrase "Arigatou gozaimasu" mean in English?',

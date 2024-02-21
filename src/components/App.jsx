@@ -17,12 +17,14 @@ import {Register} from "./login_page/signUp"
 import {Login} from "./login_page/login"
 import { LangProvider } from '../langProvider.js';
 import axios from "axios"
+import {UserContextProvider} from "./usercontext"
 
 axios.defaults.baseURL = "http://localhost:4000";
 axios.defaults.withCredentials = true;
 
 export const App = () => {
   return (
+    <UserContextProvider>
     <Router>
     <LangProvider> 
       <div className="main">
@@ -38,5 +40,6 @@ export const App = () => {
       </Routes>
     </LangProvider>
   </Router>
+  </UserContextProvider>
 );
 }

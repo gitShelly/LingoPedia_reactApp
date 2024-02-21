@@ -4,9 +4,11 @@ import { UploadNotes } from './UploadVideo';
 import './dashboard.css';
 import { videodata } from './videos.js';
 import LangContext from '../../langProvider.js';
+import { UserContext } from "../usercontext";
 
 
 export const Dashboard = () => {
+  // const { user } = useContext(UserContext);
   const {langid} = useContext(LangContext);
   
   const openVideoInNewTab = (link) => {
