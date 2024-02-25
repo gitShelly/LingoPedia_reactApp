@@ -160,7 +160,7 @@
   content: attr(data-text);
   position: absolute;
   top: 0;
-  left: 1.6rem;
+  left: 6.2rem;
   color: #df8030;
   animation: wave 2s infinite linear;
   white-space: nowrap;

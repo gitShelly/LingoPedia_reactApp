@@ -4,7 +4,7 @@ import "./navBarStyles.css";
 import logo3 from "../../Assets/logo3.svg";
 import { imports } from "../dashboard_WantToLearn/Images.js";
 import LangContext from "../../langProvider.js";
-import person from "../../Assets/dashboard/graduate.png"
+
 
 export const Navbar = () => {
   const location = useLocation();
@@ -93,10 +93,10 @@ export const Navbar = () => {
             <Link
               to="/account"
               className={
-                location.pathname === "/upload" ? "navlink on" : "navlink"
+                location.pathname === "/account" ? "navlink on" : "navlink"
               }
             >
-              <img src={person} alt="account" className="person_account" />
+              Account
             </Link>
           </li>
         </div>

@@ -43,7 +43,7 @@ export const Upload = () => {
             <div className="uploads">
               <img src={contribute} alt="contibute" />
               <div className="contri_content">
-                <p className="selected_file">
+                <p className="selected_file" data-text="Your Selected File">
                   Your Selected File
                 </p>
                 <ul className="file_name">

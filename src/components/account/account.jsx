@@ -9,6 +9,7 @@ export const Account = () => {
         <div>
         loggin in as {user.name}
         <button>logout</button>
+        check this out 
         </div>
     </div> );
 }
