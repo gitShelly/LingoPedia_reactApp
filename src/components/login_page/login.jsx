@@ -53,7 +53,7 @@ export const Login = () => {
       });
 
       setuser(data);
-      alert("Login successful");
+      // alert("Login successful");
       setredirect(true);
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -67,7 +67,7 @@ export const Login = () => {
   };
 
   if (redirect) {
-    return <Navigate to={"/course"} />;
+    return <Navigate to={"/language"} />;
   }
 
   return (

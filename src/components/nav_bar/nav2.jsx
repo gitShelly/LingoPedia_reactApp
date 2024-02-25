@@ -4,6 +4,7 @@ import "./navBarStyles.css";
 import logo3 from "../../Assets/logo3.svg";
 import { imports } from "../dashboard_WantToLearn/Images.js";
 import LangContext from "../../langProvider.js";
+import person from "../../Assets/dashboard/graduate.png"
 
 export const Navbar = () => {
   const location = useLocation();
@@ -84,6 +85,18 @@ export const Navbar = () => {
               }
             >
               Upload
+            </Link>
+          </li>
+        </div>
+        <div className="item">
+          <li className="navitem">
+            <Link
+              to="/account"
+              className={
+                location.pathname === "/upload" ? "navlink on" : "navlink"
+              }
+            >
+              <img src={person} alt="account" className="person_account" />
             </Link>
           </li>
         </div>

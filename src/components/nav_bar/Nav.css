@@ -38,6 +38,11 @@
   letter-spacing: 1.36px;
 }
 
+.person_account{
+  margin-top: 5px;
+  height: 2rem;
+  width: 2rem;
+}
 @media (max-width: 650px){
     .nav-bar{
         width: 100%;
