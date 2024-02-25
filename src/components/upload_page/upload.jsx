@@ -53,6 +53,14 @@ export const Upload = () => {
                     <embed className="changeEmbed" src={URL.createObjectURL(file)} width="100%" height="100%" type="application/pdf"/></>
                   ))}
                 </ul>
+                <div className="priv_pub">
+                  <div className="pub">
+                  <input type="radio" name="option"/> Public
+                  </div>
+                  <div className="priv">
+                  <input type="radio" name="option"/> Private
+                  </div>
+                </div>
                 <div className="btn_actions">
                   <button class="button8 type2" onClick={() => setFiles(null)}></button>
                   <Link to="/course">
