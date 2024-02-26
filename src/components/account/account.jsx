@@ -1,14 +1,21 @@
-import { useContext } from "react";
+import { useContext,useState } from "react";
 import { UserContext } from "../usercontext";
+import {Navigate} from "react-router-dom";
 import axios from "axios";
 
 export const Account = () => {
-  const { user } = useContext(UserContext);
-
+  const { user,setuser } = useContext(UserContext);
+  const [isredirect, setisredirect] = useState(null);
+  
   const logout = async () => {
     await axios.post("/logout");
+    setisredirect("/")
+    setuser(null);
   };
 
+  if(isredirect){
+    return <Navigate to={isredirect} />
+  }
   return (
     <div>
       <div>
