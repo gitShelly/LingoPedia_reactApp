@@ -136,7 +136,7 @@
 }
 .selected_file{
   text-align: center;
-  font-size:68px;
+  font-size:50px;
   color:  #064a78;
   width: 100%;
 }
@@ -145,7 +145,11 @@
   display: flex;
   justify-content: space-evenly;
 }
-
+.priv_pub{
+  display: flex;
+  justify-content: space-between;
+  width: 40%;
+}
 .selected_file {
   position: relative;
   display: inline-block;
@@ -156,7 +160,7 @@
   content: attr(data-text);
   position: absolute;
   top: 0;
-  left: 1.6rem;
+  left: 6.2rem;
   color: #df8030;
   animation: wave 2s infinite linear;
   white-space: nowrap;

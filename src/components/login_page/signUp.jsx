@@ -23,9 +23,23 @@ export const Register = () => {
   const [password, setpassword] = useState("");
   const [redirect, setredirect] = useState(false);
   const [message, setmessage] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const validpassword = (password) => {
+  const checkValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const domainRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+
+    if (!emailRegex.test(email)) {
+      return false;
+    }
+
+    const [, domain] = email.split("@");
+    if (!domainRegex.test(email)) {
+      return false;
+    }
+    return true;
+  };
+
+  const validPassword = (password) => {
     let valid = true;
     let message = "";
     if (password.length < 8) {
@@ -51,13 +65,12 @@ export const Register = () => {
       message = "Passwords cannot contain whitespace.";
       valid = false;
     }
-    setmessage(message);
-    return valid;
+    return { valid, message };
   };
+
 
   const registerUser = async (ev) => {
     const isValidPassword = validpassword(password);
-    const isValidConfirmPassword = confirmPassword === password;
     ev.preventDefault(); //so the page does not get reloaded on the event change
     if (isValidPassword) {
       try {
@@ -67,16 +80,20 @@ export const Register = () => {
           password,
         });
         alert("You are now a registered user.");
-        setredirect(true);
+        setRedirect(true);
       } catch (error) {
         if (error.response && error.response.status === 400) {
-          alert("Registration failed. The email is already in use.");
+          setMessages({
+            ...messages,
+            email: "The email is already in use.",
+          });
         } else {
-          alert("Registration failed.");
+          setMessages({
+            ...messages,
+            email: "Registration failed.",
+          });
         }
       }
-    } else {
-      alert(message);
     }
   };
 
@@ -110,8 +127,9 @@ export const Register = () => {
     const inputValue = event.target.value;
     setState(inputValue.length > 0);
   };
+
   if (redirect) {
-    return <Navigate to={"/language"} />;
+    return <Navigate to={"/login"} />;
   }
   // const isValidConfirmPassword = confirmPassword === password;
   // function toggleConfirmPasswordVisibility() {
@@ -201,7 +219,7 @@ export const Register = () => {
                 <input
                   onChange={(e) => {
                     handleInputChange(e, setIsNameFocused);
-                    setname(e.target.value);
+                    setName(e.target.value);
                   }}
                   value={name}
                   type="text"
@@ -210,6 +228,7 @@ export const Register = () => {
                 />
                 <label>Name</label>
               </div>
+              <div className="error">{messages.name}</div>
               <div
                 className={`login__form-input ${
                   isEmailFocused ? "focused" : ""
@@ -222,11 +241,12 @@ export const Register = () => {
                   onFocus={handleEmailFocus}
                   onChange={(e) => {
                     handleInputChange(e, setIsEmailFocused);
-                    setemail(e.target.value);
+                    setEmail(e.target.value);
                   }}
                 />
                 <label>E-mail</label>
               </div>
+              <div className="error">{messages.email}</div>
 
               <div
                 className={`login__form-input ${
@@ -241,7 +261,7 @@ export const Register = () => {
                   onFocus={handlePasswordFocus}
                   onChange={(e) => {
                     handleInputChange(e, setIsPasswordFocused);
-                    setpassword(e.target.value);
+                    setPassword(e.target.value);
                   }}
                 />
                 <label className={isPasswordFocused ? "focused" : ""}>
@@ -289,14 +309,11 @@ export const Register = () => {
                   onClick={() => togglePasswordVisibility("confirmPassword")}
                 />
               </div>
-
               <span className="pass_format">Password format</span>
 
-              {/* <Link to="/language"> */}
               <button className="login__form-button" type="submit">
-                <span class="text ">Explore</span>
+                <span class="text ">Register</span>
               </button>
-              {/* </Link> */}
             </form>
             <Link to="/login" className="login_change">
               ------- <span>Already an Account</span> -------

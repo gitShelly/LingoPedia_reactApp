@@ -9,6 +9,7 @@ require("dotenv").config();
 const RegisterRequest = require("./requests/register")
 const LoginRequest = require("./requests/login");
 
+
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
@@ -29,6 +30,11 @@ app.get("/", (req, res) => {
 
 app.post("/register", RegisterRequest);
 app.post("/login", LoginRequest);
+
+
+app.post("/logout", (req, res) => {
+  res.cookie("token","").json(true);
+});
 
 app.get("/profile", (req, res) => {
   const { token } = req.cookies;
