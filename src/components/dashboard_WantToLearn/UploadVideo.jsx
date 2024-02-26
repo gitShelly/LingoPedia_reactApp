@@ -6,7 +6,6 @@ import LangContext from "../../langProvider.js";
 
 export const UploadNotes = () => {
   const { pdf } = useContext(LangContext);
-  console.log(pdf)
 
   const navigate = useNavigate();
   const handleLinkClick = () => {
