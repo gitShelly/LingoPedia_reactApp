@@ -12,9 +12,9 @@ export const Account = () => {
     setFeedback(event.target.value);
   };
   const handleSubmitFeedback = () => {
-    // Here you can implement the logic to submit the feedback
+    
     console.log('Feedback submitted:', feedback);
-    // Optionally, you can clear the feedback after submission
+    
     setFeedback('');
   };
 
