@@ -7,6 +7,16 @@ import "./account.css";
 export const Account = () => {
   const { user, setuser } = useContext(UserContext);
   const [isredirect, setisredirect] = useState(null);
+  const [feedback, setFeedback] = useState('');
+  const handleFeedbackChange = (event) => {
+    setFeedback(event.target.value);
+  };
+  const handleSubmitFeedback = () => {
+    // Here you can implement the logic to submit the feedback
+    console.log('Feedback submitted:', feedback);
+    // Optionally, you can clear the feedback after submission
+    setFeedback('');
+  };
 
   const logout = async () => {
     await axios.post("/logout");
@@ -22,7 +32,7 @@ export const Account = () => {
       <Navbar />
       <div className="contain">
         <div className="first_row">
-          <p className="course_heading">
+          <p className="account_heading">
             Performance Metrics<span id="arrow">>>></span>
           </p>
           <div className="box1">
@@ -34,28 +44,29 @@ export const Account = () => {
           <p>{user.name}</p>
           <p>{user.email}</p>
 
-          <button onClick={logout}>logout</button>
+          <button className="logout" onClick={logout}>logout</button>
         </div>
       </div>
 
       <div className="contain">
         <div className="first_row">
-          <p className="course_heading">
+          <p className="account_heading">
             Feedback<span id="arrow">>>></span>
           </p>
           <div className="box1">
             <textarea
-              value=""
+              value={feedback}
+              onChange={handleFeedbackChange}
               placeholder="Enter your feedback here..."
-              rows={5}
+              rows={10}
               cols={100}
             />
             <br />
-            <button>Submit Feedback</button>
+            <button className="feedback" onClick={handleSubmitFeedback} >Submit Feedback</button>
           </div>
         </div>
-        <div className="first_row2">
-          <p className="course_heading">
+        <div className="first_row3">
+          <p className="account_heading">
             Your Notes<span id="arrow">>>></span>
           </p>
         </div>

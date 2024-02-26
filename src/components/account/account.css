@@ -1,6 +1,7 @@
 .contain{
     display: flex;
     flex-direction: row;
+    margin-top: 2.5rem;
 }
 .first_row{
     display: flex;
@@ -17,12 +18,24 @@
 .first_row2{
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+    width: 50%;
+    background-color: white;
+    width: 29%;
+    margin-left: 2.5rem;
+    border-radius: 20px;
+}
+.first_row3{
+    display: flex;
+    flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
     margin-top: 1rem;
     width: 50%;
     background-color: white;
-    width: 35%;
+    width: 29%;
     margin-left: 2.5rem;
     border-radius: 20px;
 }
@@ -63,4 +76,27 @@
     display: flex;
     flex-direction: column;
     
+}
+
+.logout{
+    text-decoration: none;
+    padding: 10px 20px;
+    background-color: #F7A60F;
+    border-radius: 25px;
+    
+    
+
+}
+.feedback{
+    text-decoration: none;
+    padding: 10px 20px;
+    background-color:  #F7A60F;
+    border-radius: 25px;
+}
+
+.account_heading{
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    color: rgba(10, 60, 95, 1);
+    margin-left: 1rem;
 }
