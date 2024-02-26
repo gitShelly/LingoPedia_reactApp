@@ -21,7 +21,7 @@ app.use(
   })
 );
 
-mongoose.connect(process.env.MONGO_URL);
+mongoose.connect(process.env.MONGO_URL)
 const jwtSecret = process.env.JWTSECRET;
 
 app.get("/", (req, res) => {
@@ -45,6 +45,23 @@ app.get("/profile", (req, res) => {
     });
   } else {
     res.json(null);
+  }
+});
+
+const VideoModel = require('./models/videomodel');
+
+app.get('/videos/:langid', async (req, res) => {
+  try {
+    const langid = req.params.langid;
+    console.log(langid)
+    const videos = await VideoModel.findOne({ lang: langid });
+    if (!videos) {
+      return res.status(404).json({ message: 'Videos not found' });
+    }
+    res.json(videos);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server Error' });
   }
 });
 

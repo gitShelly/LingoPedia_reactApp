@@ -14,7 +14,7 @@ export function UserContextProvider({ children }) {
         setready(true);
       });
     }
-  }, []);
+  });
 
 
   return (

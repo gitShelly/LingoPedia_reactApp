@@ -1,19 +1,37 @@
-import React ,{ useContext }from 'react';
+import React ,{ useContext,useState,useEffect }from 'react';
 import { Navbar } from '../nav_bar/nav2';
 import { UploadNotes } from './UploadVideo';
 import './dashboard.css';
-import { videodata } from './videos.js';
 import LangContext from '../../langProvider.js';
 
 
 
 export const Dashboard = () => {
-  // const { user } = useContext(UserContext);
+  
+  const [videos, setVideos] = useState({ beginner: [], advance: [] });
   const {langid} = useContext(LangContext);
   
   const openVideoInNewTab = (link) => {
     window.open(link, '_blank');
   };
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      
+      try {
+            const response = await fetch(`http://localhost:4000/videos/${langid}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setVideos(data);
+      } catch (error) {
+        console.error('Error fetching videos:', error);
+      }
+    };
+
+    fetchVideos();
+  }, [langid]);
 
   return (
     <div className="mainnnn">
@@ -24,7 +42,7 @@ export const Dashboard = () => {
             Beginner Level<span id="arrow">>>></span>
           </p>
           <div className="beginner_videos">
-            {videodata[langid].lang[0].beginner.map((link, i) => {
+            {videos.beginner.map((link, i) => {
               return (
                 <iframe
                   key={i}
@@ -45,7 +63,7 @@ export const Dashboard = () => {
             Advance Level<span id="arrow">>>></span>
           </p>
           <div className="beginner_videos">
-            {videodata[langid].lang[0].advance.map((link, i) => {
+            {videos.advance.map((link, i) => {
               return (
                 <iframe
                   key={i}

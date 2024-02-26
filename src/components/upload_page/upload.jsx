@@ -62,9 +62,9 @@ export const Upload = () => {
                   </div>
                 </div>
                 <div className="btn_actions">
-                  <button class="button8 type2" onClick={() => setFiles(null)}></button>
+                  <button className="button8 type2" onClick={() => setFiles(null)}></button>
                   <Link to="/course">
-                    <button class="button8 type1" onClick={handleUpload} ></button>
+                    <button className="button8 type1" onClick={handleUpload} ></button>
                   </Link>
                 </div>
               </div>
