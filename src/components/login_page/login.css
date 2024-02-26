@@ -131,12 +131,15 @@ line-height: normal;
   }
   
   .login__form-input.focused label {
-    transform: translate(15%, -160%) scale(1);
+    transform: translate(10%, -160%) scale(1);
     font-size: 12px;
     color:#fde902;
     background-color: #2e5772;
     border-radius: 2px;
     padding: 2px;
+  }
+  .login__form-input.focused input{
+    background-color: #1C4560;
   }
 
 
@@ -308,4 +311,12 @@ line-height: normal;
         width: 100%;
     }
     
+  }
+  .error {
+    color: red;
+    font-size: small;
+    margin-top: 0.2rem;
+    
+    /* font-family: 'Courier New', Courier, monospace; */
+    font-weight:lighter /* Adjust the margin as needed */
   }

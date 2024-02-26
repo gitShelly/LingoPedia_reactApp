@@ -15,14 +15,19 @@ export const Register = () => {
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isNameFocused, setIsNameFocused] = useState(false);
-  const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] =
-    useState(false);
-
-  const [name, setname] = useState("");
-  const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
-  const [redirect, setredirect] = useState(false);
-  const [message, setmessage] = useState("");
+  const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] = useState(false);
+  const [passwordMatchError, setPasswordMatchError] = useState("");
+  
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState(null);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [redirect, setRedirect] = useState(false);
+  const [messages, setMessages] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
   const checkValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -68,11 +73,27 @@ export const Register = () => {
     return { valid, message };
   };
 
-
   const registerUser = async (ev) => {
-    const isValidPassword = validpassword(password);
-    ev.preventDefault(); //so the page does not get reloaded on the event change
-    if (isValidPassword) {
+    ev.preventDefault();
+
+    const isValidEmail = checkValidEmail(email);
+    const { valid: isPasswordValid, message: passwordMessage } =
+      validPassword(password);
+
+    setMessages({
+      name: name ? "" : "Please enter your name.",
+      email: isValidEmail ? "" : "Please enter a valid email address.",
+      password: isPasswordValid ? "" : passwordMessage,
+    });
+
+    if (isValidEmail && isPasswordValid && name) {
+      if (password !== confirmPassword) {
+        setPasswordMatchError("Passwords don't match");
+        return;
+      }
+      else {
+        setPasswordMatchError(""); // Reset the error message
+      }
       try {
         await axios.post("/register", {
           name,
@@ -97,19 +118,33 @@ export const Register = () => {
     }
   };
 
-  // function togglePasswordVisibility() {
-  //   setIsPasswordFocused(true);
-  //   const passwordInput = document.getElementById("password");
-  //   const eyeIcon = document.getElementById("eyeIcon");
+  function togglePasswordVisibility() {
+    setIsPasswordFocused(true);
+    const passwordInput = document.getElementById("password");
+    const eyeIcon = document.getElementById("eyeIcon");
 
-  //   if (passwordInput.type === "password") {
-  //     passwordInput.type = "text";
-  //     eyeIcon.src = eye_open;
-  //   } else {
-  //     passwordInput.type = "password";
-  //     eyeIcon.src = eye;
-  //   }
-  // }
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      eyeIcon.src = eye_open;
+    } else {
+      passwordInput.type = "password";
+      eyeIcon.src = eye;
+    }
+  }
+  function toggleConfirmPasswordVisibility() {
+    setIsConfirmPasswordFocused(true);
+    const confirmPasswordInput = document.getElementById("confirmPassword");
+    const confirmEyeIcon = document.getElementById("confirmPasswordEyeIcon");
+  
+    if (confirmPasswordInput.type === "password") {
+      confirmPasswordInput.type = "text";
+      confirmEyeIcon.src = eye_open;
+    } else {
+      confirmPasswordInput.type = "password";
+      confirmEyeIcon.src = eye;
+    }
+  }
+  
 
   const handleEmailFocus = () => {
     setIsEmailFocused(true);
@@ -131,48 +166,6 @@ export const Register = () => {
   if (redirect) {
     return <Navigate to={"/login"} />;
   }
-  // const isValidConfirmPassword = confirmPassword === password;
-  // function toggleConfirmPasswordVisibility() {
-  //   setIsConfirmPasswordFocused(true);
-  //   const confirmPasswordInput = document.getElementById("confirmPassword");
-  //   const confirmPasswordEyeIcon = document.getElementById("confirmPasswordEyeIcon");
-
-  //   if (confirmPasswordInput.type === "password") {
-  //     confirmPasswordInput.type = "text";
-  //     confirmPasswordEyeIcon.src = eye_open;
-  //   } else {
-  //     confirmPasswordInput.type = "password";
-  //     confirmPasswordEyeIcon.src = eye;
-  //   }
-  // }
-  function togglePasswordVisibility(fieldType) {
-    setIsPasswordFocused(true);
-    const fieldInput = document.getElementById(fieldType);
-    const eyeIcon = document.getElementById(`${fieldType}EyeIcon`);
-
-  //   if (fieldInput.type === "password") {
-  //     fieldInput.type = "text";
-  //     eyeIcon.src = eye_open;
-  //   } else {
-  //     fieldInput.type = "password";
-  //     eyeIcon.src = eye;
-  //   }else {
-  //     console.error(`Element with ID ${fieldType} or ${fieldType}EyeIcon not found`);
-  //   }
-  // }
-  if (fieldInput && eyeIcon) {
-    if (fieldInput.type === "password") {
-      fieldInput.type = "text";
-      eyeIcon.src = eye_open;
-    } else {
-      fieldInput.type = "password";
-      eyeIcon.src = eye;
-    }
-  } else {
-    console.error(`Element with ID ${fieldType} or ${fieldType}EyeIcon not found`);
-  }
-}
-
 
   return (
     <div className="login">
@@ -267,19 +260,12 @@ export const Register = () => {
                 <label className={isPasswordFocused ? "focused" : ""}>
                   Password
                 </label>
-                {/* <img
-                  className="eye"
-                  src={eye}
-                  alt="eye"
-                  id="eyeIcon"
-                  onClick={() => togglePasswordVisibility("password")}
-                /> */}
                 <img
                   className="eye"
                   src={eye}
                   alt="eye"
-                  id="passwordEyeIcon"
-                  onClick={() => togglePasswordVisibility("password")}
+                  id="eyeIcon"
+                  onClick={togglePasswordVisibility}
                 />
               </div>
               <div
@@ -296,6 +282,7 @@ export const Register = () => {
                   onChange={(e) => {
                     handleInputChange(e, setIsConfirmPasswordFocused);
                     setConfirmPassword(e.target.value);
+                    // setPasswordMatchError("");
                   }}
                 />
                 <label className={isConfirmPasswordFocused ? "focused" : ""}>
@@ -306,10 +293,13 @@ export const Register = () => {
                   src={eye}
                   alt="eye"
                   id="confirmPasswordEyeIcon"
-                  onClick={() => togglePasswordVisibility("confirmPassword")}
+                  onClick={() => toggleConfirmPasswordVisibility("confirmPassword")}
                 />
               </div>
-              <span className="pass_format">Password format</span>
+
+              <div className="error">{messages.password}</div>
+              <div className="error">{passwordMatchError}</div>
+              {/* <span className="pass_format">Password format</span> */}
 
               <button className="login__form-button" type="submit">
                 <span class="text ">Register</span>
