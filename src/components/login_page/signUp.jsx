@@ -15,38 +15,40 @@ export const Register = () => {
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isNameFocused, setIsNameFocused] = useState(false);
+  const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] =
+    useState(false);
 
   const [name, setname] = useState("");
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [redirect, setredirect] = useState(false);
   const [message, setmessage] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const validpassword = (password) => {
     let valid = true;
     let message = "";
     if (password.length < 8) {
-      message="Passwords must be at least 8 characters.";
+      message = "Passwords must be at least 8 characters.";
       valid = false;
     } else if (password.length > 15) {
-      message="Passwords cannot be more than 15 characters.";
+      message = "Passwords cannot be more than 15 characters.";
       valid = false;
     } else if (!/\d/.test(password)) {
-      message="Passwords must contain at least one number.";
+      message = "Passwords must contain at least one number.";
       valid = false;
     } else if (!/[a-z]/.test(password)) {
-      message="Passwords must contain at least one lowercase letter.";
+      message = "Passwords must contain at least one lowercase letter.";
       valid = false;
     } else if (!/[A-Z]/.test(password)) {
-      message="Passwords must contain at least one uppercase letter.";
+      message = "Passwords must contain at least one uppercase letter.";
       valid = false;
     } else if (!/[!@#$%&*()-+=^]/.test(password)) {
-      message=
-        "Passwords must contain at least one special character (!@#$%&*()-+=^)."
-      ;
+      message =
+        "Passwords must contain at least one special character (!@#$%&*()-+=^).";
       valid = false;
     } else if (/\s/.test(password)) {
-      message="Passwords cannot contain whitespace.";
+      message = "Passwords cannot contain whitespace.";
       valid = false;
     }
     setmessage(message);
@@ -55,6 +57,7 @@ export const Register = () => {
 
   const registerUser = async (ev) => {
     const isValidPassword = validpassword(password);
+    const isValidConfirmPassword = confirmPassword === password;
     ev.preventDefault(); //so the page does not get reloaded on the event change
     if (isValidPassword) {
       try {
@@ -77,19 +80,19 @@ export const Register = () => {
     }
   };
 
-  function togglePasswordVisibility() {
-    setIsPasswordFocused(true);
-    const passwordInput = document.getElementById("password");
-    const eyeIcon = document.getElementById("eyeIcon");
+  // function togglePasswordVisibility() {
+  //   setIsPasswordFocused(true);
+  //   const passwordInput = document.getElementById("password");
+  //   const eyeIcon = document.getElementById("eyeIcon");
 
-    if (passwordInput.type === "password") {
-      passwordInput.type = "text";
-      eyeIcon.src = eye_open;
-    } else {
-      passwordInput.type = "password";
-      eyeIcon.src = eye;
-    }
-  }
+  //   if (passwordInput.type === "password") {
+  //     passwordInput.type = "text";
+  //     eyeIcon.src = eye_open;
+  //   } else {
+  //     passwordInput.type = "password";
+  //     eyeIcon.src = eye;
+  //   }
+  // }
 
   const handleEmailFocus = () => {
     setIsEmailFocused(true);
@@ -110,6 +113,48 @@ export const Register = () => {
   if (redirect) {
     return <Navigate to={"/language"} />;
   }
+  // const isValidConfirmPassword = confirmPassword === password;
+  // function toggleConfirmPasswordVisibility() {
+  //   setIsConfirmPasswordFocused(true);
+  //   const confirmPasswordInput = document.getElementById("confirmPassword");
+  //   const confirmPasswordEyeIcon = document.getElementById("confirmPasswordEyeIcon");
+
+  //   if (confirmPasswordInput.type === "password") {
+  //     confirmPasswordInput.type = "text";
+  //     confirmPasswordEyeIcon.src = eye_open;
+  //   } else {
+  //     confirmPasswordInput.type = "password";
+  //     confirmPasswordEyeIcon.src = eye;
+  //   }
+  // }
+  function togglePasswordVisibility(fieldType) {
+    setIsPasswordFocused(true);
+    const fieldInput = document.getElementById(fieldType);
+    const eyeIcon = document.getElementById(`${fieldType}EyeIcon`);
+
+  //   if (fieldInput.type === "password") {
+  //     fieldInput.type = "text";
+  //     eyeIcon.src = eye_open;
+  //   } else {
+  //     fieldInput.type = "password";
+  //     eyeIcon.src = eye;
+  //   }else {
+  //     console.error(`Element with ID ${fieldType} or ${fieldType}EyeIcon not found`);
+  //   }
+  // }
+  if (fieldInput && eyeIcon) {
+    if (fieldInput.type === "password") {
+      fieldInput.type = "text";
+      eyeIcon.src = eye_open;
+    } else {
+      fieldInput.type = "password";
+      eyeIcon.src = eye;
+    }
+  } else {
+    console.error(`Element with ID ${fieldType} or ${fieldType}EyeIcon not found`);
+  }
+}
+
 
   return (
     <div className="login">
@@ -202,14 +247,49 @@ export const Register = () => {
                 <label className={isPasswordFocused ? "focused" : ""}>
                   Password
                 </label>
-                <img
+                {/* <img
                   className="eye"
                   src={eye}
                   alt="eye"
                   id="eyeIcon"
-                  onClick={togglePasswordVisibility}
+                  onClick={() => togglePasswordVisibility("password")}
+                /> */}
+                <img
+                  className="eye"
+                  src={eye}
+                  alt="eye"
+                  id="passwordEyeIcon"
+                  onClick={() => togglePasswordVisibility("password")}
                 />
               </div>
+              <div
+                className={`login__form-input ${
+                  isConfirmPasswordFocused ? "focused" : ""
+                }`}
+              >
+                <img src={key} alt="key" />
+                <input
+                  value={confirmPassword}
+                  type="password"
+                  id="confirmPassword"
+                  onFocus={() => setIsConfirmPasswordFocused(true)}
+                  onChange={(e) => {
+                    handleInputChange(e, setIsConfirmPasswordFocused);
+                    setConfirmPassword(e.target.value);
+                  }}
+                />
+                <label className={isConfirmPasswordFocused ? "focused" : ""}>
+                  Confirm Password
+                </label>
+                <img
+                  className="eye"
+                  src={eye}
+                  alt="eye"
+                  id="confirmPasswordEyeIcon"
+                  onClick={() => togglePasswordVisibility("confirmPassword")}
+                />
+              </div>
+
               <span className="pass_format">Password format</span>
 
               {/* <Link to="/language"> */}
