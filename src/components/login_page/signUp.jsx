@@ -15,10 +15,13 @@ export const Register = () => {
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isNameFocused, setIsNameFocused] = useState(false);
-
+  const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] = useState(false);
+  const [passwordMatchError, setPasswordMatchError] = useState("");
+  
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState(null);
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [messages, setMessages] = useState({
     name: "",
@@ -70,7 +73,6 @@ export const Register = () => {
     return { valid, message };
   };
 
-
   const registerUser = async (ev) => {
     ev.preventDefault();
 
@@ -85,6 +87,13 @@ export const Register = () => {
     });
 
     if (isValidEmail && isPasswordValid && name) {
+      if (password !== confirmPassword) {
+        setPasswordMatchError("Passwords don't match");
+        return;
+      }
+      else {
+        setPasswordMatchError(""); // Reset the error message
+      }
       try {
         await axios.post("/register", {
           name,
@@ -122,6 +131,20 @@ export const Register = () => {
       eyeIcon.src = eye;
     }
   }
+  function toggleConfirmPasswordVisibility() {
+    setIsConfirmPasswordFocused(true);
+    const confirmPasswordInput = document.getElementById("confirmPassword");
+    const confirmEyeIcon = document.getElementById("confirmPasswordEyeIcon");
+  
+    if (confirmPasswordInput.type === "password") {
+      confirmPasswordInput.type = "text";
+      confirmEyeIcon.src = eye_open;
+    } else {
+      confirmPasswordInput.type = "password";
+      confirmEyeIcon.src = eye;
+    }
+  }
+  
 
   const handleEmailFocus = () => {
     setIsEmailFocused(true);
@@ -245,8 +268,38 @@ export const Register = () => {
                   onClick={togglePasswordVisibility}
                 />
               </div>
+              <div
+                className={`login__form-input ${
+                  isConfirmPasswordFocused ? "focused" : ""
+                }`}
+              >
+                <img src={key} alt="key" />
+                <input
+                  value={confirmPassword}
+                  type="password"
+                  id="confirmPassword"
+                  onFocus={() => setIsConfirmPasswordFocused(true)}
+                  onChange={(e) => {
+                    handleInputChange(e, setIsConfirmPasswordFocused);
+                    setConfirmPassword(e.target.value);
+                    // setPasswordMatchError("");
+                  }}
+                />
+                <label className={isConfirmPasswordFocused ? "focused" : ""}>
+                  Confirm Password
+                </label>
+                <img
+                  className="eye"
+                  src={eye}
+                  alt="eye"
+                  id="confirmPasswordEyeIcon"
+                  onClick={() => toggleConfirmPasswordVisibility("confirmPassword")}
+                />
+              </div>
+
               <div className="error">{messages.password}</div>
-              <span className="pass_format">Password format</span>
+              <div className="error">{passwordMatchError}</div>
+              {/* <span className="pass_format">Password format</span> */}
 
               <button className="login__form-button" type="submit">
                 <span class="text ">Register</span>
