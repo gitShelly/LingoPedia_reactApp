@@ -72,6 +72,7 @@ export const Register = () => {
 
     if (!name) {
       errorMessage += "Please enter your name. ";
+      
     }
 
     if (!isValidEmail) {

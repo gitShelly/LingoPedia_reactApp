@@ -8,6 +8,8 @@ require("dotenv").config();
 
 const RegisterRequest = require("./requests/register")
 const LoginRequest = require("./requests/login");
+const FeedbackRequest = require("./requests/feedback_req");
+const VideoFetch= require("./requests/videoFetch");
 
 
 const app = express();
@@ -30,7 +32,8 @@ app.get("/", (req, res) => {
 
 app.post("/register", RegisterRequest);
 app.post("/login", LoginRequest);
-
+app.post("/submit-feedback",FeedbackRequest)
+app.get('/videos/:langid', VideoFetch);
 
 app.post("/logout", (req, res) => {
   res.cookie("token","").json(true);
@@ -48,22 +51,7 @@ app.get("/profile", (req, res) => {
   }
 });
 
-const VideoModel = require('./models/videomodel');
 
-app.get('/videos/:langid', async (req, res) => {
-  try {
-    const langid = req.params.langid;
-    console.log(langid)
-    const videos = await VideoModel.findOne({ lang: langid });
-    if (!videos) {
-      return res.status(404).json({ message: 'Videos not found' });
-    }
-    res.json(videos);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server Error' });
-  }
-});
 
 app.listen(4000);
 
