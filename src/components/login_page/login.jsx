@@ -17,7 +17,7 @@ export const Login = () => {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [redirect, setredirect] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState("");
   const { setuser } = useContext(UserContext);
 
   function togglePasswordVisibility() {
@@ -57,9 +57,9 @@ export const Login = () => {
       setredirect(true);
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        alert("Invalid login credentials");
+        setErrorMessage("Invalid login credentials");
       } else if (error.response && error.response.status === 404) {
-        alert("User not found with the provided email");
+        setErrorMessage("User not found with the provided email");
       } else {
         alert("Login failed");
       }
@@ -153,6 +153,7 @@ export const Login = () => {
               </div>
 
               {/* <Link to="/course"> */}
+              <div className="error">{errorMessage}</div>
               <button className="login__form-button" type="submit">
                 <span class="text ">Continue</span>
               </button>
