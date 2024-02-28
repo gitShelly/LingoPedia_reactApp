@@ -314,8 +314,5 @@ line-height: normal;
     color: red;
     font-size: small;
     margin-top: 0.2rem;
-    width: 70%;
-    
-    /* font-family: 'Courier New', Courier, monospace; */
-    font-weight:lighter /* Adjust the margin as needed */
+    font-weight:lighter 
   }

@@ -96,12 +96,13 @@ export const Account = () => {
         <div className="right_contain">
           <div className="right_contain_box1">
             <img src={profile} alt="profile" id="profile_image" />
-            <span id="profile_name">Avishi</span>
-            <span id="profile_mail">name123@gmail.com</span>
+            <span id="profile_name">{user.name}</span>
+            <span id="profile_mail">{user.email}</span>
             <button className="logout" onClick={logout}>
               logout
             </button>
           </div>
+          
         </div>
       </div>
     </div>
