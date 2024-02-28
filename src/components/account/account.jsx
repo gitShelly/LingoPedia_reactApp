@@ -11,14 +11,29 @@ export const Account = () => {
   const { user, setuser } = useContext(UserContext);
   const [isredirect, setisredirect] = useState(null);
   const [feedback, setFeedback] = useState("");
-  const handleFeedbackChange = (event) => {
-    setFeedback(event.target.value);
-  };
-  const handleSubmitFeedback = () => {
-    console.log("Feedback submitted:", feedback);
 
-    setFeedback("");
+  const handleFeedbackChange = (event) => {
+      setFeedback(event.target.value);
   };
+
+  const handleSubmitFeedback = async () => {
+      try {
+          const response = await axios.post("/submit-feedback", {
+              userId: user._id,
+              feedback: feedback
+          });
+
+          if (response.data.success) {
+              alert("Feedback submitted successfully");
+              setFeedback(""); // Clear the feedback input after submission
+          } else {
+              alert("Failed to submit feedback");
+          }
+      } catch (error) {
+          console.error("Error submitting feedback:", error.message);
+      }
+  };
+
 
   const logout = async () => {
     await axios.post("/logout");
@@ -96,12 +111,13 @@ export const Account = () => {
         <div className="right_contain">
           <div className="right_contain_box1">
             <img src={profile} alt="profile" id="profile_image" />
-            <span id="profile_name">Avishi</span>
-            <span id="profile_mail">name123@gmail.com</span>
+            <span id="profile_name">{user.name}</span>
+            <span id="profile_mail">{user.email}</span>
             <button className="logout" onClick={logout}>
               logout
             </button>
           </div>
+          
         </div>
       </div>
     </div>

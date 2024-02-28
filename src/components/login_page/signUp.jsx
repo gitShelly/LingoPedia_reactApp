@@ -16,7 +16,6 @@ export const Register = () => {
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isNameFocused, setIsNameFocused] = useState(false);
   const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] = useState(false);
-  // const [passwordMatchError, setPasswordMatchError] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const [name, setName] = useState("");
@@ -73,6 +72,7 @@ export const Register = () => {
 
     if (!name) {
       errorMessage += "Please enter your name. ";
+      
     }
 
     if (!isValidEmail) {
@@ -98,7 +98,7 @@ export const Register = () => {
         email,
         password,
       });
-      alert("You are now a registered user.");
+      // alert("You are now a registered user.");
       setRedirect(true);
     } catch (error) {
       if (error.response && error.response.status === 400) {
