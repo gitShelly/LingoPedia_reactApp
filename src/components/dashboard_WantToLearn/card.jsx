@@ -16,7 +16,6 @@ export const Card = (props) => {
       <div className='Card__component-img'>
         <img src={props.pic} style={props.customStyles} alt="card"/>
       </div>
-      hello
     </div></Link>
   )
 }

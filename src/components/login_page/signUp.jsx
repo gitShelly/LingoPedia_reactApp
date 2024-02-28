@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Link, Navigate } from "react-router-dom";
+import axios from "axios";
 import logo3 from "../../Assets/Welcome page/logo4.svg";
 import login from "../../Assets/Welcome page/signup.png";
 import logo from "../../Assets/Welcome page/thinking.svg";
@@ -8,45 +10,32 @@ import eye from "../../Assets/Welcome page/el_eye-close (1).png";
 import eye_open from "../../Assets/Welcome page/eye-open2.svg";
 import user from "../../Assets/Welcome page/user.png";
 import "./login.css";
-import { Link, Navigate } from "react-router-dom";
-import axios from "axios";
 
 export const Register = () => {
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isNameFocused, setIsNameFocused] = useState(false);
   const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] = useState(false);
-  const [passwordMatchError, setPasswordMatchError] = useState("");
-  
+  // const [passwordMatchError, setPasswordMatchError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
-  const [messages, setMessages] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
 
   const checkValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const domainRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
 
-    if (!emailRegex.test(email)) {
-      return false;
-    }
-
-    const [, domain] = email.split("@");
-    if (!domainRegex.test(email)) {
-      return false;
-    }
-    return true;
+    return emailRegex.test(email) && domainRegex.test(email);
   };
 
   const validPassword = (password) => {
     let valid = true;
     let message = "";
+
     if (password.length < 8) {
       message = "Passwords must be at least 8 characters.";
       valid = false;
@@ -70,6 +59,7 @@ export const Register = () => {
       message = "Passwords cannot contain whitespace.";
       valid = false;
     }
+
     return { valid, message };
   };
 
@@ -77,74 +67,47 @@ export const Register = () => {
     ev.preventDefault();
 
     const isValidEmail = checkValidEmail(email);
-    const { valid: isPasswordValid, message: passwordMessage } =
-      validPassword(password);
+    const { valid: isPasswordValid, message: passwordMessage } = validPassword(password);
 
-    setMessages({
-      name: name ? "" : "Please enter your name.",
-      email: isValidEmail ? "" : "Please enter a valid email address.",
-      password: isPasswordValid ? "" : passwordMessage,
-    });
+    let errorMessage = "";
 
-    if (isValidEmail && isPasswordValid && name) {
-      if (password !== confirmPassword) {
-        setPasswordMatchError("Passwords don't match");
-        return;
-      }
-      else {
-        setPasswordMatchError(""); // Reset the error message
-      }
-      try {
-        await axios.post("/register", {
-          name,
-          email,
-          password,
-        });
-        alert("You are now a registered user.");
-        setRedirect(true);
-      } catch (error) {
-        if (error.response && error.response.status === 400) {
-          setMessages({
-            ...messages,
-            email: "The email is already in use.",
-          });
-        } else {
-          setMessages({
-            ...messages,
-            email: "Registration failed.",
-          });
-        }
+    if (!name) {
+      errorMessage += "Please enter your name. ";
+    }
+
+    if (!isValidEmail) {
+      errorMessage += "Please enter a valid email. ";
+    }
+
+    if (!isPasswordValid) {
+      errorMessage += passwordMessage + " ";
+    }
+
+    if (password !== confirmPassword) {
+      errorMessage += "Passwords don't match. ";
+    }
+
+    if (errorMessage) {
+      setErrorMessage(errorMessage.trim());
+      return;
+    }
+
+    try {
+      await axios.post("/register", {
+        name,
+        email,
+        password,
+      });
+      alert("You are now a registered user.");
+      setRedirect(true);
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        setErrorMessage(error.response.data.message); // Set custom error message from server
+      } else {
+        setErrorMessage("Registration failed.");
       }
     }
   };
-
-  function togglePasswordVisibility() {
-    setIsPasswordFocused(true);
-    const passwordInput = document.getElementById("password");
-    const eyeIcon = document.getElementById("eyeIcon");
-
-    if (passwordInput.type === "password") {
-      passwordInput.type = "text";
-      eyeIcon.src = eye_open;
-    } else {
-      passwordInput.type = "password";
-      eyeIcon.src = eye;
-    }
-  }
-  function toggleConfirmPasswordVisibility() {
-    setIsConfirmPasswordFocused(true);
-    const confirmPasswordInput = document.getElementById("confirmPassword");
-    const confirmEyeIcon = document.getElementById("confirmPasswordEyeIcon");
-  
-    if (confirmPasswordInput.type === "password") {
-      confirmPasswordInput.type = "text";
-      confirmEyeIcon.src = eye_open;
-    } else {
-      confirmPasswordInput.type = "password";
-      confirmEyeIcon.src = eye;
-    }
-  }
-  
 
   const handleEmailFocus = () => {
     setIsEmailFocused(true);
@@ -161,6 +124,28 @@ export const Register = () => {
   const handleInputChange = (event, setState) => {
     const inputValue = event.target.value;
     setState(inputValue.length > 0);
+  };
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordFocused(true);
+    const passwordInput = document.getElementById("password");
+
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+    } else {
+      passwordInput.type = "password";
+    }
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setIsConfirmPasswordFocused(true);
+    const confirmPasswordInput = document.getElementById("confirmPassword");
+
+    if (confirmPasswordInput.type === "password") {
+      confirmPasswordInput.type = "text";
+    } else {
+      confirmPasswordInput.type = "password";
+    }
   };
 
   if (redirect) {
@@ -195,6 +180,7 @@ export const Register = () => {
             alignItems: "center",
             justifyContent: "center",
             marginBottom: "5rem",
+            width: "100%",
           }}
         >
           <div className="login__form-title">
@@ -204,9 +190,7 @@ export const Register = () => {
           <div className="login__form-details">
             <form onSubmit={registerUser}>
               <div
-                className={`login__form-input ${
-                  isNameFocused ? "focused" : ""
-                }`}
+                className={`login__form-input ${isNameFocused ? "focused" : ""}`}
               >
                 <img src={user} alt="email" />
                 <input
@@ -221,11 +205,9 @@ export const Register = () => {
                 />
                 <label>Name</label>
               </div>
-              <div className="error">{messages.name}</div>
+              {/* <div className="error">{errorMessage}</div> */}
               <div
-                className={`login__form-input ${
-                  isEmailFocused ? "focused" : ""
-                }`}
+                className={`login__form-input ${isEmailFocused ? "focused" : ""}`}
               >
                 <img src={email2} alt="email" />
                 <input
@@ -239,12 +221,9 @@ export const Register = () => {
                 />
                 <label>E-mail</label>
               </div>
-              <div className="error">{messages.email}</div>
-
+              {/* <div className="error">{errorMessage}</div> */}
               <div
-                className={`login__form-input ${
-                  isPasswordFocused ? "focused" : ""
-                }`}
+                className={`login__form-input ${isPasswordFocused ? "focused" : ""}`}
               >
                 <img src={key} alt="key" />
                 <input
@@ -268,6 +247,7 @@ export const Register = () => {
                   onClick={togglePasswordVisibility}
                 />
               </div>
+              {/* <div className="error">{errorMessage}</div> */}
               <div
                 className={`login__form-input ${
                   isConfirmPasswordFocused ? "focused" : ""
@@ -282,7 +262,6 @@ export const Register = () => {
                   onChange={(e) => {
                     handleInputChange(e, setIsConfirmPasswordFocused);
                     setConfirmPassword(e.target.value);
-                    // setPasswordMatchError("");
                   }}
                 />
                 <label className={isConfirmPasswordFocused ? "focused" : ""}>
@@ -293,14 +272,10 @@ export const Register = () => {
                   src={eye}
                   alt="eye"
                   id="confirmPasswordEyeIcon"
-                  onClick={() => toggleConfirmPasswordVisibility("confirmPassword")}
+                  onClick={toggleConfirmPasswordVisibility}
                 />
               </div>
-
-              <div className="error">{messages.password}</div>
-              <div className="error">{passwordMatchError}</div>
-              {/* <span className="pass_format">Password format</span> */}
-
+              <div className="error">{errorMessage}</div>
               <button className="login__form-button" type="submit">
                 <span class="text ">Register</span>
               </button>
@@ -314,3 +289,5 @@ export const Register = () => {
     </div>
   );
 };
+
+
