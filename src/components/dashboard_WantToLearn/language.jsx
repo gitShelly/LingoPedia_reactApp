@@ -29,7 +29,7 @@ export const Language = () => {
       <div className="Card ">
         {imports.map((cardEntry) => (
           <Card 
-            key1={cardEntry.id}
+            key={cardEntry.id}
             name={cardEntry.title}
             pic={cardEntry.image}
             breadth={cardEntry.width}

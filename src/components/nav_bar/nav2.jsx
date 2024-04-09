@@ -24,7 +24,7 @@ export const Navbar = () => {
   };
   return (
     <nav className="nav">
-      <div class="id">
+      <div className="id">
         <Link to="/">
           <img className="nav_logo" src={logo3} alt="logo"></img>
         </Link>
@@ -41,7 +41,7 @@ export const Navbar = () => {
                 location.pathname === "/language" ? "navlink on " : "navlink"
               }
             >
-              <div style={{ display: "flex", alignItems: "center" }}>
+              <div id="language-set" style={{ display: "flex", alignItems: "center" }}>
                 <img
                   src={imports[langid].flag}
                   alt="flag"

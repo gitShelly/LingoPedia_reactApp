@@ -6,7 +6,7 @@ export const Card = (props) => {
   const { setLangIdAndUpdate } = useContext(LangContext);
 
   const languageId = () => {
-    setLangIdAndUpdate(props.key1);
+    setLangIdAndUpdate(props.key);
   };
   return (
     <Link to="/course"><div className='Card__component hvr-grow-shadow' onClick={languageId}>

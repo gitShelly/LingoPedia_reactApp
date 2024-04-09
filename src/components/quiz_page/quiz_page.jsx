@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import "./quiz_page.css";
 import "./quiz_progress.css";
 import { Navbar } from "../nav_bar/nav2";
-import { QuizData } from "./quizz-Q-A/QuizData.js";
 import Circle from "./circle";
 import { Result } from "./result";
 import LangContext from "../../langProvider.js";
@@ -15,6 +14,8 @@ export const Quizpage = () => {
   const [score, setScore] = useState(0);
   const [clicked, setclickedOption] = useState(null); 
   const [circle] = useState(7);
+  const [quizData, setQuizData] = useState([]);
+  const [width, setwidth] = useState(0);
 
   const arr = [];
   for (let i = 0; i < circle; i++) {
@@ -42,7 +43,6 @@ export const Quizpage = () => {
     }
   };
 
-  const [width, setwidth] = useState(0);
   useEffect(() => {
     setwidth((100 / (circle - 1)) * currentstate);
   }, [circle, currentstate]);
@@ -53,10 +53,10 @@ export const Quizpage = () => {
       progressbarChange();
     }
 
-    if (currentstate < QuizData[currentLang].lang.length - 2) {
+    if (currentstate < quizData.length - 2) {
       setcurrentstate(currentstate + 1);
       setclickedOption(null); 
-    } else if (currentstate < QuizData[currentLang].lang.length - 1) {
+    } else if (currentstate < quizData.length - 1) {
       setButtonText("Results");
       setclickedOption(null);
     }
@@ -66,6 +66,7 @@ export const Quizpage = () => {
     BackprogressbarChange();
     if (currentstate > 0) {
       setcurrentstate(currentstate - 1);
+      setScore(score-1)
       if (clicked !== null) {
         updateScore(); 
       }
@@ -77,7 +78,7 @@ export const Quizpage = () => {
   };
 
   const updateScore = () => {
-    if (clicked === QuizData[currentLang].lang[currentstate].answer) {
+    if (clicked === quizData[currentstate]?.answer) {
       setScore((prevScore) => prevScore + 1);
     }
   };
@@ -89,9 +90,32 @@ export const Quizpage = () => {
     setButtonText("Next");
   };
 
+  useEffect(() => {
+
+    const fetchQuizData = async () => {
+      try {
+        const response = await fetch(`http://localhost:4000/quizdata/${currentLang}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch quiz data");
+        }
+        const data = await response.json();
+        setQuizData(data.questions);
+      } catch (error) {
+        console.error("Error fetching quiz data:", error.message);
+      }
+    };
+    fetchQuizData();
+  }, [currentLang]);
+
+  const hello=()=>{
+    console.log("working Avishi")
+  }
+
   if (currentstate === 7) {
+    
     return <Result resl={score} tryAgain={resetAll} />;
   } else {
+    hello();
     return (
       <div className="container">
         <Navbar />
@@ -106,10 +130,10 @@ export const Quizpage = () => {
             </div>
           </div>
           <div className="question_box">
-            {QuizData[currentLang].lang[currentstate].question}
+          {quizData[currentstate]?.question}
           </div>
           <div className="option-container">
-            {QuizData[currentLang].lang[currentstate].options.map(
+            {quizData[currentstate]?.options.map(
               (option, i) => {
                 return (
                   <button

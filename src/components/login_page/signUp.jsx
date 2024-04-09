@@ -72,7 +72,7 @@ export const Register = () => {
 
     if (!name) {
       errorMessage += "Please enter your name. ";
-      
+
     }
 
     if (!isValidEmail) {
@@ -129,11 +129,14 @@ export const Register = () => {
   const togglePasswordVisibility = () => {
     setIsPasswordFocused(true);
     const passwordInput = document.getElementById("password");
+    const eyeIcon = document.getElementById("eyeIcon");
 
     if (passwordInput.type === "password") {
       passwordInput.type = "text";
+      eyeIcon.src = eye_open;
     } else {
       passwordInput.type = "password";
+      eyeIcon.src = eye;
     }
   };
 
