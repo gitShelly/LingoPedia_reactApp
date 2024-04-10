@@ -9,6 +9,7 @@ import key from "../../Assets/Welcome page/carbon_password.png";
 import eye from "../../Assets/Welcome page/el_eye-close (1).png";
 import eye_open from "../../Assets/Welcome page/eye-open2.svg";
 import user from "../../Assets/Welcome page/user.png";
+import adminkey from "../../Assets/Welcome page/key.png";
 import "./login.css";
 
 export const Register = () => {
@@ -236,7 +237,7 @@ export const Register = () => {
                     iskeyFocused ? "focused" : ""
                   }`}
                 >
-                  <img src={user} alt="key" />
+                  <img src={adminkey} alt="key" />
                   <input
                     onChange={(e) => {
                       handleInputChange(e, setIskeyFocused);

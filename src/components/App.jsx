@@ -16,6 +16,7 @@ import {Upload} from './upload_page/upload';
 import {Register} from "./login_page/signUp"
 import {Login} from "./login_page/login"
 import {Account} from "../components/account/account"
+import {Admin} from "../components/account/admin"
 import { LangProvider } from '../langProvider.js';
 import axios from "axios"
 import {UserContextProvider} from "./usercontext"
@@ -35,6 +36,7 @@ export const App = () => {
         <Route exact path="/" element={<Home />} />
         <Route exact path="/register" element={<Register />} />
         <Route exact path="/login" element={<Login />} />
+        <Route exact path="/admin" element={<Admin />} />
         <Route exact path="/language" element={<Language />} />
         <Route exact path="/course" element={<Dashboard />} />
         <Route exact path="/test" element={<Quizpage />} />

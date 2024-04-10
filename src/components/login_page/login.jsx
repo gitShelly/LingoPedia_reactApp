@@ -70,7 +70,7 @@ export const Login = () => {
 
   if (redirect) {
     if(admin){
-      return <h1>Admin page</h1>
+      return <Navigate to={"/admin"}/>
     }
     return <Navigate to={"/language"} />;
   }
