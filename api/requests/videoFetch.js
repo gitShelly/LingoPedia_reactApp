@@ -3,7 +3,7 @@ const VideoModel = require("../models/videomodel");
 const VideoFetch = async (req, res) => {
         try {
           const langid = req.params.langid;
-          console.log(langid)
+          // console.log(langid)
           const videos = await VideoModel.findOne({ lang: langid });
           if (!videos) {
             return res.status(404).json({ message: 'Videos not found' });

@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext,useMemo } from "react";
+import axios from "axios";
 import "./quiz_page.css";
 import "./quiz_progress.css";
 import { Navbar } from "../nav_bar/nav2";
 import Circle from "./circle";
 import { Result } from "./result";
 import LangContext from "../../langProvider.js";
+import { UserContext } from "../usercontext";
 
 export const Quizpage = () => {
   const { langid } = useContext(LangContext);
@@ -16,6 +18,9 @@ export const Quizpage = () => {
   const [circle] = useState(7);
   const [quizData, setQuizData] = useState([]);
   const [width, setwidth] = useState(0);
+
+  const { user } = useContext(UserContext);
+  const languageNames = useMemo(() => ["English", "Japanese", "Italian", "Chinese","Russian","Korean","German","French"],[]);
 
   const arr = [];
   for (let i = 0; i < circle; i++) {
@@ -107,15 +112,33 @@ export const Quizpage = () => {
     fetchQuizData();
   }, [currentLang]);
 
-  const hello=()=>{
-    console.log("working Avishi")
-  }
+  useEffect(() => {
+    const saveResultToMongoDB = async () => {
+      const languageName = languageNames[langid];
+      const currentDate = new Date().toJSON().slice(0, 10);
+      try {
+        const response = await axios.post('/scorerecord', {
+          userId: user._id,
+          languageName:languageName,
+          marks:score,
+          date: currentDate,
+        });
+  
+        console.log("Record saved to MongoDB:", response.data);
+      } catch (error) {
+        console.error("Error saving record:", error);
+      }
+    };
+  
+    if (currentstate === 7) {
+      saveResultToMongoDB();
+    }
+  }, [currentstate, langid, languageNames, user, score]);
+
 
   if (currentstate === 7) {
-    
     return <Result resl={score} tryAgain={resetAll} />;
   } else {
-    hello();
     return (
       <div className="container">
         <Navbar />

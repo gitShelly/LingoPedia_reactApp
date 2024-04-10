@@ -19,6 +19,7 @@ export const Login = () => {
   const [redirect, setredirect] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const { setuser } = useContext(UserContext);
+  const [admin, setadmin] = useState(false);
 
   function togglePasswordVisibility() {
     const passwordInput = document.getElementById("password");
@@ -51,9 +52,10 @@ export const Login = () => {
         email,
         password,
       });
-
+      if(data.userType==="admin"){
+          setadmin(true)
+      }
       setuser(data);
-      // alert("Login successful");
       setredirect(true);
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -67,6 +69,9 @@ export const Login = () => {
   };
 
   if (redirect) {
+    if(admin){
+      return <h1>Admin page</h1>
+    }
     return <Navigate to={"/language"} />;
   }
 

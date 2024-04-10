@@ -11,11 +11,15 @@ const LoginRequest = require("./requests/login");
 const FeedbackRequest = require("./requests/feedback_req");
 const VideoFetch= require("./requests/videoFetch");
 const fetchQuizdata = require("./requests/fect_quizdata");
+const recorddata=require("./requests/recordRequest");
 
+var bodyParser = require('body-parser');
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
 
 app.use(
   cors({
@@ -36,6 +40,7 @@ app.post("/login", LoginRequest);
 app.post("/submit-feedback",FeedbackRequest)
 app.get('/videos/:langid', VideoFetch);
 app.get('/quizdata/:langid',fetchQuizdata);
+app.post('/scorerecord',recorddata);
 
 app.post("/logout", (req, res) => {
   res.cookie("token","").json(true);

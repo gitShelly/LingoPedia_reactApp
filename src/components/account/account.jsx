@@ -25,7 +25,7 @@ export const Account = () => {
 
           if (response.data.success) {
               alert("Feedback submitted successfully");
-              setFeedback(""); // Clear the feedback input after submission
+              setFeedback(""); 
           } else {
               alert("Failed to submit feedback");
           }
@@ -117,7 +117,7 @@ export const Account = () => {
               logout
             </button>
           </div>
-          
+          {/* <div>uploads</div> */}
         </div>
       </div>
     </div>

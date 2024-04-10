@@ -15,7 +15,9 @@ export const Register = () => {
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isNameFocused, setIsNameFocused] = useState(false);
-  const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] = useState(false);
+  const [iskeyFocused, setIskeyFocused] = useState(false);
+  const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] =
+    useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const [name, setName] = useState("");
@@ -23,6 +25,8 @@ export const Register = () => {
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
+  const [userType, setuserType] = useState("");
+  const [secretkey, setsecretkey] = useState("");
 
   const checkValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -63,54 +67,63 @@ export const Register = () => {
   };
 
   const registerUser = async (ev) => {
-    ev.preventDefault();
-
-    const isValidEmail = checkValidEmail(email);
-    const { valid: isPasswordValid, message: passwordMessage } = validPassword(password);
-
+    
     let errorMessage = "";
 
-    if (!name) {
-      errorMessage += "Please enter your name. ";
+    if (userType === "admin" && secretkey !== "lingopediaAdmin") {
+      ev.preventDefault();
+      alert("invlaid admin");
+    } else {
+      ev.preventDefault();
+      const isValidEmail = checkValidEmail(email);
+      const { valid: isPasswordValid, message: passwordMessage } =
+        validPassword(password);
 
-    }
+      if (!name) {
+        errorMessage += "Please enter your name. ";
+      }
 
-    if (!isValidEmail) {
-      errorMessage += "Please enter a valid email. ";
-    }
+      if (!isValidEmail) {
+        errorMessage += "Please enter a valid email. ";
+      }
 
-    if (!isPasswordValid) {
-      errorMessage += passwordMessage + " ";
-    }
+      if (!isPasswordValid) {
+        errorMessage += passwordMessage + " ";
+      }
 
-    if (password !== confirmPassword) {
-      errorMessage += "Passwords don't match. ";
-    }
+      if (password !== confirmPassword) {
+        errorMessage += "Passwords don't match. ";
+      }
 
-    if (errorMessage) {
-      setErrorMessage(errorMessage.trim());
-      return;
-    }
+      if (errorMessage) {
+        setErrorMessage(errorMessage.trim());
+        return;
+      }
 
-    try {
-      await axios.post("/register", {
-        name,
-        email,
-        password,
-      });
-      // alert("You are now a registered user.");
-      setRedirect(true);
-    } catch (error) {
-      if (error.response && error.response.status === 400) {
-        setErrorMessage(error.response.data.message); // Set custom error message from server
-      } else {
-        setErrorMessage("Registration failed.");
+      try {
+        await axios.post("/register", {
+          name,
+          email,
+          password,
+          userType
+        });
+        // alert("You are now a registered user.");
+        setRedirect(true);
+      } catch (error) {
+        if (error.response && error.response.status === 400) {
+          setErrorMessage(error.response.data.message);
+        } else {
+          setErrorMessage("Registration failed.");
+        }
       }
     }
   };
 
   const handleEmailFocus = () => {
     setIsEmailFocused(true);
+  };
+  const handlekeyFocus = () => {
+    setIskeyFocused(true);
   };
 
   const handlePasswordFocus = () => {
@@ -190,10 +203,58 @@ export const Register = () => {
             <h2>Welcome User</h2>
             <img src={logo} alt="logo" />
           </div>
+
           <div className="login__form-details">
             <form onSubmit={registerUser}>
+              <div className="usertype_div ">
+                <span className="register_span">Register as:</span>
+                <div classname="usertype_options">
+                  <input
+                    type="radio"
+                    name="usertype"
+                    value="user"
+                    onChange={(e) => {
+                      setuserType(e.target.value);
+                    }}
+                  />
+                  <span id="user_type">User</span>
+                  <input
+                    type="radio"
+                    name="usertype"
+                    value="admin"
+                    onChange={(e) => {
+                      setuserType(e.target.value);
+                    }}
+                  />
+                  <span>Admin</span>
+                </div>
+              </div>
+
+              {userType === "admin" ? (
+                <div
+                  className={`login__form-input ${
+                    iskeyFocused ? "focused" : ""
+                  }`}
+                >
+                  <img src={user} alt="key" />
+                  <input
+                    onChange={(e) => {
+                      handleInputChange(e, setIskeyFocused);
+                      setsecretkey(e.target.value);
+                    }}
+                    value={secretkey}
+                    type="text"
+                    id="key"
+                    onFocus={handlekeyFocus}
+                  />
+                  <label>Secret Key</label>
+                </div>
+              ) : null}
+
               <div
-                className={`login__form-input ${isNameFocused ? "focused" : ""}`}
+                className={`login__form-input ${
+                  isNameFocused ? "focused" : ""
+                }`}
               >
                 <img src={user} alt="email" />
                 <input
@@ -210,7 +271,9 @@ export const Register = () => {
               </div>
               {/* <div className="error">{errorMessage}</div> */}
               <div
-                className={`login__form-input ${isEmailFocused ? "focused" : ""}`}
+                className={`login__form-input ${
+                  isEmailFocused ? "focused" : ""
+                }`}
               >
                 <img src={email2} alt="email" />
                 <input
@@ -226,7 +289,9 @@ export const Register = () => {
               </div>
               {/* <div className="error">{errorMessage}</div> */}
               <div
-                className={`login__form-input ${isPasswordFocused ? "focused" : ""}`}
+                className={`login__form-input ${
+                  isPasswordFocused ? "focused" : ""
+                }`}
               >
                 <img src={key} alt="key" />
                 <input
@@ -292,5 +357,3 @@ export const Register = () => {
     </div>
   );
 };
-
-
