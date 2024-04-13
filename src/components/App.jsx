@@ -16,7 +16,7 @@ import {Upload} from './upload_page/upload';
 import {Register} from "./login_page/signUp"
 import {Login} from "./login_page/login"
 import {Account} from "../components/account/account"
-import {Admin} from "../components/account/admin/admin"
+import {Admin} from "../components/account/admin"
 import { LangProvider } from '../langProvider.js';
 import axios from "axios"
 import {UserContextProvider} from "./usercontext"

@@ -38,7 +38,6 @@ export const UploadNotes = () => {
         </div>
       </div>
     </div>
-    
 
   );
 };
