@@ -5,7 +5,6 @@ const FeedbackRequest = async (req, res) => {
   try {
     const { userId, feedback } = req.body;
 
-    // Fetch user details to get name
     const user = await UserModel.findById(userId);
 
     if (!user) {
@@ -14,14 +13,12 @@ const FeedbackRequest = async (req, res) => {
         .json({ success: false, message: "User not found" });
     }
 
-    // Create a new feedback document
     const newFeedback = new FeedbackModel({
       userId,
       name: user.name,
       feedback,
     });
 
-    // Save the feedback to the database
     await newFeedback.save();
 
     res

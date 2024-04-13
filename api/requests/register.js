@@ -30,7 +30,7 @@ const User = require("../models/user");
 const bcryptsalt = bcrypt.genSaltSync(10); // to ensure it takes time for the attacker to decrypt the password
 
 const RegisterRequest = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password ,userType} = req.body;
   // sending to the database by creating the user
   try {
     const existingUser = await User.findOne({ email });
@@ -41,6 +41,7 @@ const RegisterRequest = async (req, res) => {
       name,
       email,
       password: bcrypt.hashSync(password, bcryptsalt),
+      userType
     });
     res.json(userdoc);
   } catch (error) {

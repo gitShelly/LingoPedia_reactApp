@@ -63,7 +63,7 @@ line-height: normal;
     display: flex;
     align-items: center;
     justify-content:center;
-    margin-top: 6rem; 
+    margin-top: 4rem; 
 }
 .login__form-title h2{
  color: #1C4560;
@@ -78,11 +78,35 @@ line-height: normal;
     height: 18vh;
     padding-left: 3rem;
 }
+
+.usertype_div{
+    /* width: 20vw; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.5rem;  
+    gap: 1rem; 
+    color: #1C4560;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    font-family: Pangolin;
+}
+#user_type{
+margin-right: 1rem;
+}
+.usertype_options{
+    display: flex;
+    align-items: center;
+}
+
+
 .login__form-details {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 2rem;
+    margin-top: 1rem;
     justify-content: center;
     width: 100%;
 }
@@ -100,7 +124,7 @@ line-height: normal;
     justify-content: center;
     width: 100%;
     height: 2rem;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     border-radius: 15px;
     border: none;
     background: rgba(10, 60, 95, 0.85);
@@ -251,7 +275,7 @@ line-height: normal;
 .login__form-button {
     display: flex;
     align-items: center;
-    margin-top: 3rem;
+    margin-top: 2rem;
     justify-content: center;
     border: none;
     background-color:transparent;
