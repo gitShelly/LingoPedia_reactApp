@@ -1,18 +1,15 @@
 import { useContext, useState } from "react";
-import { UserContext } from "../usercontext";
+import { UserContext } from "../../usercontext";
 import { Navigate } from "react-router-dom";
-import { Nav } from "../nav_bar/Nav"
+import { Nav } from "../../nav_bar/Nav"
 import axios from "axios";
+import profile from "../../../Assets/dashboard/unauthorized-person.png";
 
-import profile from "../../Assets/dashboard/graduate.png";
+import "../account.css";
 
-import "./account.css";
 export const Admin = () => {
   const { user, setuser } = useContext(UserContext);
   const [isredirect, setisredirect] = useState(null);
-
-
-
 
   const logout = async () => {
     await axios.post("/logout");
@@ -28,6 +25,14 @@ export const Admin = () => {
       <Nav />
       <div className="main_box">
         <div className="left_contain">
+            language selection flags
+            <br/>
+            video add
+            <br/>
+            video delete
+            <br/>
+            notes delete
+
         </div>
 
         <div className="right_contain">
@@ -39,7 +44,7 @@ export const Admin = () => {
               logout
             </button>
           </div>
-          {/* <div>uploads</div> */}
+          <div>feedback</div>
         </div>
       </div>
     </div>
