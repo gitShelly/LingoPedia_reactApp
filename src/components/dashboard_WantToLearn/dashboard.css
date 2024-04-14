@@ -7,12 +7,15 @@
     width: 100%;
     background-color: white;
     width: 95%;
-    margin-left: 2.5rem;
+    margin-left: 1.5rem;
     border-radius: 20px;
-    padding: 1rem;
+    padding: 0 1rem;
+    margin-bottom: 1rem;
 }
 .mainnnn{
     background-color: #f8f1e4; 
+    width: 100vw;
+    height: 120vh;
 }
 .courses_beginner{
     display: flex;

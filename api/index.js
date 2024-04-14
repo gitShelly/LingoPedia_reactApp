@@ -12,6 +12,9 @@ const FeedbackRequest = require("./requests/feedback_req");
 const VideoFetch= require("./requests/videoFetch");
 const fetchQuizdata = require("./requests/fect_quizdata");
 const recorddata=require("./requests/recordRequest");
+const fetchFeedback=require("./requests/feeback_fetch");
+const addvideo=require("./requests/addvideo");
+const deletevideo=require("./requests/deletevideo");
 
 var bodyParser = require('body-parser');
 
@@ -41,6 +44,9 @@ app.post("/submit-feedback",FeedbackRequest)
 app.get('/videos/:langid', VideoFetch);
 app.get('/quizdata/:langid',fetchQuizdata);
 app.post('/scorerecord',recorddata);
+app.get('/fetch-feedback',fetchFeedback);
+app.post("/videos/:langid/:level",addvideo)
+app.delete("/videos/:langid/:level",deletevideo)
 
 app.post("/logout", (req, res) => {
   res.cookie("token","").json(true);
@@ -57,8 +63,6 @@ app.get("/profile", (req, res) => {
     res.json(null);
   }
 });
-
-
 
 app.listen(4000);
 
