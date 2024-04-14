@@ -29,7 +29,6 @@ const LoginRequest = async (req, res) => {
         }
         );
       } else {
-      console.log(passOk);
       res.status(401).json({ message: "Incorrect password" });
     }
   } catch (error) {
