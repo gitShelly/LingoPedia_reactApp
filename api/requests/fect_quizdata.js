@@ -8,6 +8,7 @@ const fetchQuizdata= async (req, res) => {
     if (!quizData) {
       return res.status(404).json({ message: 'Quiz data not found' });
     }
+    
     res.json({ questions: quizData.questions });
   } catch (error) {
     console.error('Error fetching quiz data:', error.message);

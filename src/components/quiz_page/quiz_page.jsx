@@ -95,6 +95,25 @@ export const Quizpage = () => {
     setButtonText("Next");
   };
 
+
+  const shuffleArray = (array) => {
+    const slicedArray = array.length > 7 ? array.slice(0, 7) : array;
+    console.log(slicedArray.length)
+    let currentIndex = array.length;
+    let temporaryValue, randomIndex;
+
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      temporaryValue = slicedArray[currentIndex];
+      slicedArray[currentIndex] = slicedArray[randomIndex];
+      slicedArray[randomIndex] = temporaryValue;
+    }
+  
+    return slicedArray;
+  };
+
   useEffect(() => {
 
     const fetchQuizData = async () => {
@@ -104,7 +123,9 @@ export const Quizpage = () => {
           throw new Error("Failed to fetch quiz data");
         }
         const data = await response.json();
-        setQuizData(data.questions);
+        const shuffledQuestions = shuffleArray(data.questions);
+        console.log(shuffledQuestions)
+        setQuizData(shuffledQuestions);
       } catch (error) {
         console.error("Error fetching quiz data:", error.message);
       }
