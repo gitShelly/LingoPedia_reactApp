@@ -1,4 +1,3 @@
-
 const QuizModel = require('../models/quiz');
 
 const fetchQuizdata= async (req, res) => {

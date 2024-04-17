@@ -99,9 +99,6 @@ export const Admin = () => {
     }
   };
   
-
-  
-
   return (
     <div className="main_">
       <Nav3 />
@@ -180,7 +177,7 @@ export const Admin = () => {
         <div className="right_containadmin">
           <div className="adminright_contain_box1">
             <div className="update_functions">
-              <label>Updating Url</label>
+              <label>New Embedded Url</label>
               <input
                 type="text"
                 value={url}
