@@ -50,7 +50,7 @@ export const Account = () => {
     setSelectedFlag(null);
     setStartDate(moment().startOf("day"));
     setEndDate(moment().endOf("day"));
-    setRecords(records)
+    fetchRecords();
   };
 
   const FilterModal = ({
