@@ -21,7 +21,7 @@ export const imports= [
     id:0,
     title:"English",
     image:Nyc,
-    styles:{width:'8rem'},
+    // styles:{width:'8rem'},
     flag:eng
   },
 
@@ -66,7 +66,7 @@ export const imports= [
     id:7,
     title:"French",
     image:France,
-    styles:{ width:'7rem'},
+    // styles:{ width:'7rem'},
     flag:fre
   },
  
