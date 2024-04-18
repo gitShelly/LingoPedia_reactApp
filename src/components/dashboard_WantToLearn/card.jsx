@@ -14,7 +14,7 @@ export const Card = (props) => {
         <h3>{props.name}</h3>
       </div>
       <div className='Card__component-img'>
-        <img src={props.pic} style={props.customStyles} alt="card"/>
+        <img src={props.pic} style={props.name === "English" || props.name === "French" ? { width: '7rem' } : {}} alt="card" />
       </div>
     </div></Link>
   )

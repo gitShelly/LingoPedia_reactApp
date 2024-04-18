@@ -15,6 +15,7 @@ const recorddata=require("./requests/recordRequest");
 const fetchFeedback=require("./requests/feeback_fetch");
 const addvideo=require("./requests/addvideo");
 const deletevideo=require("./requests/deletevideo");
+const fetchrecord = require("./requests/recordFetch");
 
 var bodyParser = require('body-parser');
 
@@ -46,6 +47,7 @@ app.get('/quizdata/:langid',fetchQuizdata);
 app.post('/scorerecord',recorddata);
 app.get('/fetch-feedback',fetchFeedback);
 app.post("/videos/:langid/:level",addvideo)
+app.get('/record-fetch',fetchrecord)
 app.delete("/videos/:langid/:level",deletevideo)
 
 app.post("/logout", (req, res) => {

@@ -33,7 +33,7 @@ export const Language = () => {
             name={cardEntry.title}
             pic={cardEntry.image}
             breadth={cardEntry.width}
-            customStyles={cardEntry.styles}
+            width={cardEntry.title === "English" || cardEntry.title === "French" ? "7rem" : ""}
           />
         ))}
       </div>
