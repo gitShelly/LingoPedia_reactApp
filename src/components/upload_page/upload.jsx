@@ -6,18 +6,47 @@ import contribute from "../../Assets/upload page/contribute.png";
 import "./upload.css";
 import { Link } from "react-router-dom";
 import LangContext from "../../langProvider.js";
-
+import  axios  from "axios";
+import {UserContext} from '../usercontext.jsx';
 export const Upload = () => {
   const [files, setFiles] = useState(null);
   const inputRef = useRef();
-  const { setPdfAndUpdate, setUploadedFileAndUpdate } = useContext(LangContext);
+  const {langid} = useContext(LangContext);
+  const [ispublic,setIsPublic]=useState(false);
+  const {user}=useContext(UserContext);
 
-  useEffect(() => {
-    if (files && files.length > 0) {
-      setPdfAndUpdate(files);
-      setUploadedFileAndUpdate(files[0]);
+  const handleUpload = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("userId", user._id); // Assuming userId is available in scope
+      formData.append("lang", langid); // Assuming lang is available in scope
+      formData.append("pdf", files[0]); // Assuming files[0] contains the uploaded file
+      formData.append("isPublic", ispublic);
+
+      const response = await axios.post("/submit-file", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.data.success) {
+        alert("File uploaded successfully");
+        setFiles(null);
+      } else {
+        alert("Failed to upload file");
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error.message);
+      alert("Failed to upload file");
     }
-  }, [files, setPdfAndUpdate, setUploadedFileAndUpdate]);
+  };
+
+  // useEffect(() => {
+  //   if (files && files.length > 0) {
+  //     setPdfAndUpdate(files);
+  //     setUploadedFileAndUpdate(files[0]);
+  //   }
+  // }, [files, setPdfAndUpdate, setUploadedFileAndUpdate]);
 
   const handleDragOver = (event) => {
     event.preventDefault();
@@ -30,9 +59,7 @@ export const Upload = () => {
     setFiles(null);
   };
 
-  const handleUpload = () => {
-    setPdfAndUpdate();
-  };
+ 
 
   if (files) {
     return (
@@ -55,10 +82,10 @@ export const Upload = () => {
                 </ul>
                 <div className="priv_pub">
                   <div className="pub">
-                  <input type="radio" name="option"/> Public
+                  <input type="radio" onChange={()=>setIsPublic(true)} name="option"/> Public
                   </div>
                   <div className="priv">
-                  <input type="radio" name="option"/> Private
+                  <input type="radio"  onChange={()=>setIsPublic(false)} checked={!ispublic} name="option"/> Private
                   </div>
                 </div>
                 <div className="btn_actions">

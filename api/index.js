@@ -1,4 +1,5 @@
 const express = require("express");
+const multer=require("multer");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
@@ -16,6 +17,7 @@ const fetchFeedback=require("./requests/feeback_fetch");
 const addvideo=require("./requests/addvideo");
 const deletevideo=require("./requests/deletevideo");
 const fetchrecord = require("./requests/recordFetch");
+const uploadPdf=require('./requests/uploadPdf');
 
 var bodyParser = require('body-parser');
 
@@ -32,6 +34,8 @@ app.use(
   })
 );
 
+const storage=multer.memoryStorage()
+const upload=multer({storage:storage})
 mongoose.connect(process.env.MONGO_URL)
 const jwtSecret = process.env.JWTSECRET;
 
@@ -49,7 +53,7 @@ app.get('/fetch-feedback',fetchFeedback);
 app.post("/videos/:langid/:level",addvideo)
 app.get('/record-fetch',fetchrecord)
 app.delete("/videos/:langid/:level",deletevideo)
-
+app.post("/submit-file",upload.single("pdf"),uploadPdf)
 app.post("/logout", (req, res) => {
   res.cookie("token","").json(true);
 });
