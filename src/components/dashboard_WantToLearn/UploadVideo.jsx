@@ -1,43 +1,76 @@
-import { useContext} from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import "./dashboard.css";
-import download from "../../Assets/upload page/download.png";
-import LangContext from "../../langProvider.js";
 
-export const UploadNotes = () => {
-  const { pdf } = useContext(LangContext);
+export const UploadNotes = (props) => {
+  const [pdfFiles, setPdfFiles] = useState([]);
 
-  const navigate = useNavigate();
-  const handleLinkClick = () => {
-    navigate("/upload");
-  };
+  const langid=props.lang
 
-  const handleEmbedClick = (file) => {
-    const pdfUrl = URL.createObjectURL(file);
-    window.open(pdfUrl, "_blank");
-  };
+  useEffect(() => {
+    // Fetch the uploaded PDF files from the server based on langid
+    const fetchPdfFiles = async () => {
+      try {
+        const response = await axios.get(`/fetch-public-files/${langid}`);
+        if (response.data.success) {
+          const fetchedPdfFiles = response.data.pdfFiles; // Assuming server sends the array of PDF files
+          setPdfFiles(fetchedPdfFiles);
+        } else {
+          console.error("Failed to fetch PDF files");
+        }
+      } catch (error) {
+        console.error("Error fetching PDF files:", error);
+      }
+    };
+
+    fetchPdfFiles();
+  }, [langid]);
+
+
+  const handleEmbedClick = (pdfFile) => {
+    // Convert buffer data to a Uint8Array
+    console.log(pdfFile.filename)
+    const uint8Array = new Uint8Array(pdfFile.data.data);
+
+    // Create a Blob object from Uint8Array with filename
+    const pdfBlob = new Blob([uint8Array], { type: pdfFile.contentType });
+
+    // Create a URL for the Blob object
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+
+    // Open the PDF file in a new window with filename
+    const newWindow = window.open(pdfUrl, "_blank");
+    if (newWindow) {
+        newWindow.document.title = pdfFile.filename;
+        console.log(newWindow.document) // Set the title of the new window to the filename
+    } else {
+        console.error("Failed to open PDF in new window");
+    }
+};
+
+
+
+
   return (
     <div className="uploads">
-        <div className="pdf-container"  >
-          {pdf && pdf.type === "application/pdf" ? (
-            <>
-             <embed
-             src={URL.createObjectURL(pdf)}
-             width="100%"
-             height="100%"
-             type="application/pdf"
-           />
-           <span className="embedview" onClick={() => handleEmbedClick(pdf)}>view</span>
-           </>
-         ) : null}
-        </div>
-
-      <div className="uploadzone">
-        <div className="button" onClick={handleLinkClick}>
-          <img src={download} alt="download" className="download"/>
-        </div>
-      </div>
+      {pdfFiles.length > 0 ? (
+        pdfFiles.map((pdfFile, index) => (
+          <div key={index} className="pdf-container">
+            <embed
+              className="uploads-pdfs-fetch"
+              src={URL.createObjectURL(new Blob([pdfFile.data], { type: pdfFile.contentType }))}
+              width="100%"
+              height="100%"
+              type="application/pdf"
+            />
+            <span className="embedview" onClick={() => handleEmbedClick(pdfFile)}>
+             <span>{pdfFile.filename}</span><span id="viewww">view</span> 
+            </span>
+          </div>
+        ))
+      ) : (
+        <div>No PDF files available</div>
+      )}
     </div>
-
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext ,useEffect} from "react";
+import React, { useState, useRef, useContext} from "react";
 import { Navbar } from "../nav_bar/nav2";
 import upload from "../../Assets/upload page/upload.png";
 import uploadicon from "../../Assets/upload page/upload icon 2.png";
@@ -15,13 +15,19 @@ export const Upload = () => {
   const [ispublic,setIsPublic]=useState(false);
   const {user}=useContext(UserContext);
 
+
+
+  
   const handleUpload = async () => {
+    console.log(files)
     try {
       const formData = new FormData();
+      
       formData.append("userId", user._id); // Assuming userId is available in scope
       formData.append("lang", langid); // Assuming lang is available in scope
-      formData.append("pdf", files[0]); // Assuming files[0] contains the uploaded file
+      formData.append("pdf", files); // Assuming files[0] contains the uploaded file
       formData.append("isPublic", ispublic);
+      formData.append("file_name",files[0].name);
 
       const response = await axios.post("/submit-file", formData, {
         headers: {
@@ -41,12 +47,6 @@ export const Upload = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (files && files.length > 0) {
-  //     setPdfAndUpdate(files);
-  //     setUploadedFileAndUpdate(files[0]);
-  //   }
-  // }, [files, setPdfAndUpdate, setUploadedFileAndUpdate]);
 
   const handleDragOver = (event) => {
     event.preventDefault();
@@ -85,7 +85,7 @@ export const Upload = () => {
                   <input type="radio" onChange={()=>setIsPublic(true)} name="option"/> Public
                   </div>
                   <div className="priv">
-                  <input type="radio"  onChange={()=>setIsPublic(false)} checked={!ispublic} name="option"/> Private
+                  <input type="radio"  onChange={()=>setIsPublic(false)} name="option"/> Private
                   </div>
                 </div>
                 <div className="btn_actions">
@@ -115,7 +115,7 @@ export const Upload = () => {
               <p onClick={() => inputRef.current.click()} className="browse">
                 Your files here or Browse to upload
               </p>
-              <input type="file" multiple onChange={(event) => setFiles(event.target.files)} hidden accept="image/png, image/jpeg ,application/pdf , application/msword" ref={inputRef}/>
+              <input type="file" onChange={(event) => setFiles(event.target.files)} hidden accept="image/png, image/jpeg ,application/pdf , application/msword" ref={inputRef}/>
               <p className="upload_type">
                 Only Jpeg/Png/Pdf/Doc files with max size of 150MB
               </p>

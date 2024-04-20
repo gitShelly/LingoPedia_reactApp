@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../usercontext";
-
+import { UploadNotes } from "../dashboard_WantToLearn/UploadVideo";
 import { Nav3 } from "../nav_bar/Nav3";
 import axios from "axios";
 import { imports } from "../dashboard_WantToLearn/Images.js";
@@ -171,6 +171,7 @@ export const Admin = () => {
             <span className="account_heading">
               public notes<span id="arrow">>>></span>
             </span>
+            {/* <UploadNotes lang={langid} /> */}
           </div>
         </div>
 

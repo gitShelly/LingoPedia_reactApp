@@ -16,7 +16,7 @@ const uploadPdf=async (req, res) => {
       await privateFile.save();
   
       // If the file is marked as public, also add it to the public list
-      if (isPublic) {
+      if (isPublic===true||isPublic==="true") {
         const publicFile = new PublicModel({
           userId,
           lang,

@@ -12,8 +12,9 @@ const PrivateSchema = new Schema({
         required: true
     },
     pdf: {
-        type: Buffer,
-        required: true
+        filename: String, // Name of the file
+        contentType: String, // MIME type of the file
+        data: Buffer // Buffer containing file data
     }
 });
 

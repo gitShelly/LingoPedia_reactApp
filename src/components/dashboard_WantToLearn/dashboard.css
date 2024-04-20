@@ -51,10 +51,12 @@
     border-radius: 20px;
     padding: 2rem;
   }
+
   
   .pdf-container {
     width: 100%;
     height: 100%;
+    margin-right: 0.5rem;
   }
 
   #arrow {
@@ -73,17 +75,23 @@
   }
   
   .pdf-container {
-    width: 100%;
-    height: 100%;
     position: relative;
     cursor: pointer;
+    overflow: hidden;
   }
 
   .embedview{
     display: flex;
-    justify-content: flex-end;
-    text-decoration: underline;
-    color:#f7a60f;
+    justify-content: space-between;
+    color:rgb(18, 60, 90);
     margin-right: 0.5rem;
     
+  }
+  #viewww{
+    text-decoration:underline;
+    color:#f7a60f;
+  }
+
+  .uploads-pdfs-fetch{
+    overflow: hidden;
   }

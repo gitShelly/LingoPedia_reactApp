@@ -83,7 +83,7 @@ export const Dashboard = () => {
           <p className="course_heading">
             Study Notes<span id="arrow">>>></span>
           </p>
-          <UploadNotes />
+          <UploadNotes lang={langid} />
         </div>
       </div>
     </div>
