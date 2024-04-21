@@ -160,7 +160,7 @@ export const Login = () => {
               {/* <Link to="/course"> */}
               <div className="error">{errorMessage}</div>
               <button className="login__form-button" type="submit">
-                <span class="text ">Continue</span>
+                <span className="text ">Continue</span>
               </button>
               {/* </Link> */}
             </form>

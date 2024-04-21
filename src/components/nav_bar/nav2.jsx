@@ -24,7 +24,7 @@ export const Navbar = () => {
   };
   return (
     <nav className="nav">
-      <div class="id">
+      <div className="id">
         <Link to="/">
           <img className="nav_logo" src={logo3} alt="logo"></img>
         </Link>

@@ -50,6 +50,12 @@
     gap: 5px;
     padding: 10px;
   }
+  .grid-item{
+    /* margin: auto; */
+    display: flex;
+    justify-content: center;
+    margin: 0;
+  }
   .grid_heading{
     font-size: large;
     color: #F7A60F;
@@ -76,6 +82,11 @@
     border-radius: 25px;
     border: none;
     color: white;
+    transition: transform 0.3s ease;
+}
+.feedback_btn:hover{
+    transform: scale(1.1);
+    background-color: rgba(10, 60, 95, 1);
 }
 #button_div{
     width: 100%;
@@ -117,6 +128,10 @@
     font-size: medium;
     cursor:pointer;
 }
+.logout:hover{
+    background-color: rgba(10, 60, 95, 1);
+    transform: scale(1.1);
+}
 
 .account_heading{
     font-size: 1.2rem;
@@ -153,6 +168,11 @@
     /* width: auto;  */
     outline:none;
     border: none;
+    transition: transform 0.3s ease;
+    
+  }
+  .flag-image:hover{
+    transform: scale(1.4);
   }
   
   .lang_filter {
@@ -165,11 +185,12 @@
   }
   .flag_lang{
     display: flex;
-    
     flex-direction: column;
     width: 25%;
     align-items: center;
   }
+ 
+
   .filter-button{
     cursor: pointer;
     padding: 0.5rem 1rem;
@@ -178,6 +199,14 @@
     border:none;
     color: white;
     font-size: medium;
+    transition: transform 0.3s ease;
+  }
+  
+  .filter-button:hover{
+    background-color: rgba(10, 60, 95, 1);
+    transform: scale(1.1); 
+    
+   
   }
   .filter-modal h3{
     color:  #F7A60F;
@@ -231,6 +260,12 @@
     font-size: 14px;
     border-radius: 25px;
     padding: 0.3rem 0.8rem;
+    transition: transform 0.3s ease;
+}
+.filter-btn button:hover{
+    cursor: pointer;
+    background-color: #F7A60F;
+    transform: scale(1.1);
 }
 .reset{
     margin-left: 1rem;

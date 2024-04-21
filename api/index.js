@@ -6,23 +6,23 @@ const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
-const RegisterRequest = require("./requests/register")
+const RegisterRequest = require("./requests/register");
 const LoginRequest = require("./requests/login");
 const FeedbackRequest = require("./requests/feedback_req");
-const VideoFetch= require("./requests/videoFetch");
+const VideoFetch = require("./requests/videoFetch");
 const fetchQuizdata = require("./requests/fect_quizdata");
-const recorddata=require("./requests/recordRequest");
-const fetchFeedback=require("./requests/feeback_fetch");
-const addvideo=require("./requests/addvideo");
-const deletevideo=require("./requests/deletevideo");
+const recorddata = require("./requests/recordRequest");
+const fetchFeedback = require("./requests/feeback_fetch");
+const addvideo = require("./requests/addvideo");
+const deletevideo = require("./requests/deletevideo");
 const fetchrecord = require("./requests/recordFetch");
 
-var bodyParser = require('body-parser');
+var bodyParser = require("body-parser");
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(
@@ -32,7 +32,7 @@ app.use(
   })
 );
 
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(process.env.MONGO_URL);
 const jwtSecret = process.env.JWTSECRET;
 
 app.get("/", (req, res) => {
@@ -41,17 +41,17 @@ app.get("/", (req, res) => {
 
 app.post("/register", RegisterRequest);
 app.post("/login", LoginRequest);
-app.post("/submit-feedback",FeedbackRequest)
-app.get('/videos/:langid', VideoFetch);
-app.get('/quizdata/:langid',fetchQuizdata);
-app.post('/scorerecord',recorddata);
-app.get('/fetch-feedback',fetchFeedback);
-app.post("/videos/:langid/:level",addvideo)
-app.get('/record-fetch',fetchrecord)
-app.delete("/videos/:langid/:level",deletevideo)
+app.post("/submit-feedback", FeedbackRequest);
+app.get("/videos/:langid", VideoFetch);
+app.get("/quizdata/:langid", fetchQuizdata);
+app.post("/scorerecord", recorddata);
+app.get("/fetch-feedback", fetchFeedback);
+app.post("/videos/:langid/:level", addvideo);
+app.get("/record-fetch/:userid", fetchrecord);
+app.delete("/videos/:langid/:level", deletevideo);
 
 app.post("/logout", (req, res) => {
-  res.cookie("token","").json(true);
+  res.cookie("token", "").json(true);
 });
 
 app.get("/profile", (req, res) => {

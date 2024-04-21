@@ -129,7 +129,7 @@ export const Admin = () => {
           </div>
           <div className="admin_courses_beginner  ">
             <p className="admin_course_heading">
-              Beginner Level<span id="arrow">>>></span>
+              Beginner Level<span id="arrow">&gt;&gt;&gt;</span>
             </p>
             <div className="beginner_videos">
               {videos.beginner.map((link, i) => {
@@ -150,7 +150,7 @@ export const Admin = () => {
           </div>
           <div className="admin_courses_beginner">
             <p className="admin_course_heading">
-              Advance Level<span id="arrow">>>></span>
+              Advance Level<span id="arrow">&gt;&gt;&gt;</span>
             </p>
             <div className="beginner_videos">
               {videos.advance.map((link, i) => {
@@ -172,7 +172,7 @@ export const Admin = () => {
 
           <div>
             <span className="account_heading">
-              public notes<span id="arrow">>>></span>
+              public notes<span id="arrow">&gt;&gt;&gt;</span>
             </span>
           </div>
         </div>
@@ -224,7 +224,7 @@ export const Admin = () => {
 
           <div className="right_contain_box2">
             <span className="account_heading">
-              User Feedbacks<span id="arrow">>>></span>
+              User Feedbacks<span id="arrow">&gt;&gt;&gt;</span>
             </span>
             <div className="feedback_list">
               {feedbacks.map((feedback, index) => (
