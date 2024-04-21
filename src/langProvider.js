@@ -8,16 +8,7 @@ export const LangProvider = ({ children }) => {
     storedLangId ? parseInt(storedLangId, 10) : 0
   );
 
-  const [pdf, setPdf] = useState("");
-  const [uploadedFile, setUploadedFile] = useState(null);
-
-  const setUploadedFileAndUpdate = (file) => {
-    setUploadedFile(file);
-  };
-  const setPdfAndUpdate = (url) => {
-    setPdf(uploadedFile);
-  };
-
+  
   useEffect(() => {
     localStorage.setItem("langid", langid.toString());
   }, [langid]);
@@ -31,10 +22,6 @@ export const LangProvider = ({ children }) => {
       value={{
         langid,
         setLangIdAndUpdate,
-        pdf,
-        setPdfAndUpdate,
-        uploadedFile,
-        setUploadedFileAndUpdate,
       }}
     >
       {children}

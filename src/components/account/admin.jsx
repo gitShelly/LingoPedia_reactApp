@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../usercontext";
-
+import { UploadNotes } from "../dashboard_WantToLearn/UploadVideo";
 import { Nav3 } from "../nav_bar/Nav3";
 import axios from "axios";
 import { imports } from "../dashboard_WantToLearn/Images.js";
@@ -99,9 +99,6 @@ export const Admin = () => {
     }
   };
   
-
-  
-
   return (
     <div className="main_">
       <Nav3 />
@@ -174,13 +171,14 @@ export const Admin = () => {
             <span className="account_heading">
               public notes<span id="arrow">&gt;&gt;&gt;</span>
             </span>
+            {/* <UploadNotes lang={langid} /> */}
           </div>
         </div>
 
         <div className="right_containadmin">
           <div className="adminright_contain_box1">
             <div className="update_functions">
-              <label>Updating Url</label>
+              <label>New Embedded Url</label>
               <input
                 type="text"
                 value={url}

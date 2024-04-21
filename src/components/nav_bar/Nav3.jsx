@@ -32,7 +32,7 @@ export const Nav3 = () => {
         <span className="pedia">Pedia</span>
       </div>
       <div className="nav_right">
-        <span className="user_name-nav3">Admin</span>
+        <span className="user_name-nav3">{user.name}</span>
        <img src={logoutswitch} alt="logoutbtn" className="logout_switch" onClick={logout}/>
       </div>
     </div>
