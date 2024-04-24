@@ -6,8 +6,6 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
-const { GridFSBucket } = require("mongodb");
-const { v4: uuidv4 } = require("uuid");
 const { Readable } = require('stream');
 
 
@@ -26,6 +24,8 @@ const fetchpublicpdf=require('./requests/public_fetch');
 
 const PrivateModel=require("./models/privatePdf");
 const PublicModel=require("./models/publicPdf");
+const fetchprivatepdf=require("./requests/fetch_private");
+const privatedelete=require("./requests/delete_privatepdf");
 
 
 var bodyParser = require('body-parser');
@@ -72,17 +72,15 @@ app.get('/fetch-feedback',fetchFeedback);
 app.post("/videos/:langid/:level",addvideo)
 app.get('/record-fetch',fetchrecord)
 app.delete("/videos/:langid/:level",deletevideo)
+app.delete("/delete-private-pdf",privatedelete)
+
 
 
 app.post("/submit-file",multer().none(),async (req, res) => {
   try {
       const { userId, lang, pdf, isPublic ,file_name} = req.body;
-
-      // Generate a unique filename
-      
       const filename =file_name;
 
-      // Create a readable stream from the file buffer
       const readableStream = new Readable();
       readableStream.push(pdf);
       readableStream.push(null);
@@ -154,6 +152,7 @@ app.post("/submit-file",multer().none(),async (req, res) => {
 
 
 app.get("/fetch-public-files/:langID",fetchpublicpdf)
+app.get("/fetch-private-files",fetchprivatepdf)
 
 app.post("/logout", (req, res) => {
   res.cookie("token","").json(true);

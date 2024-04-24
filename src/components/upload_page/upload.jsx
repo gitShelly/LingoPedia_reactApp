@@ -22,10 +22,9 @@ export const Upload = () => {
     console.log(files)
     try {
       const formData = new FormData();
-      
-      formData.append("userId", user._id); // Assuming userId is available in scope
-      formData.append("lang", langid); // Assuming lang is available in scope
-      formData.append("pdf", files); // Assuming files[0] contains the uploaded file
+      formData.append("userId", user._id); 
+      formData.append("lang", langid); 
+      formData.append("pdf", files); 
       formData.append("isPublic", ispublic);
       formData.append("file_name",files[0].name);
 

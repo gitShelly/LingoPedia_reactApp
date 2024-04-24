@@ -5,17 +5,17 @@ const uploadPdf=async (req, res) => {
     try {
       const { userId, lang, pdf, isPublic } = req.body;
   
-      // Create a new private file
+      
       const privateFile = new PrivateModel({
         userId,
         lang,
         pdf
       });
       
-      // Save the private file
+      
       await privateFile.save();
   
-      // If the file is marked as public, also add it to the public list
+      
       if (isPublic===true||isPublic==="true") {
         const publicFile = new PublicModel({
           userId,

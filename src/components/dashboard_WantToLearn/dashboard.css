@@ -90,8 +90,17 @@
   #viewww{
     text-decoration:underline;
     color:#f7a60f;
+    cursor: pointer;
   }
 
   .uploads-pdfs-fetch{
     overflow: hidden;
+  }
+
+  .uploads-pdfs-fetch::-webkit-scrollbar {
+    width: 0.5px; 
+  }
+  
+  .uploads-pdfs-fetch::-webkit-scrollbar-track {
+    background:transparent;
   }

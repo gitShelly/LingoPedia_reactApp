@@ -9,18 +9,50 @@
 
 .main_box{
     display: flex;
-    height: inherit;
+    height: 100%;
+    margin-bottom: 1rem;
 }
+
+.pdf-container-account {
+  background-color: white;
+  padding: 1rem 0rem ;
+  border-radius: 20px;
+  margin-top: 0.5rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 65%;
+  overflow-y: auto;
+  position: relative;
+  align-items: center;
+}
+
+.pdf-item {
+  margin-bottom: 1rem;
+  width: 90%;
+  margin: auto;
+  
+  
+}
+
+.pdf-container-account::-webkit-scrollbar {
+  width: 0.5px; 
+}
+
+.pdf-container-account::-webkit-scrollbar-track {
+  background:transparent;
+}
+
 
 .left_contain{
     border-radius: 1rem;
-    margin: 1.5rem 1rem 0 1rem;  
+    margin: 1.5rem 1rem 1rem 1rem;  
     padding: 1rem 2rem 0 2rem;
     width: 80%;
     display: flex;
     flex-direction: column;
-    height: 92%;
-    background-color: white;
+    height: 95%;
+    background-color:white;
 }
 
 #performance_filter{
@@ -76,6 +108,7 @@
     border-radius: 25px;
     border: none;
     color: white;
+    /* margin-bottom: 1rem; */
 }
 #button_div{
     width: 100%;
@@ -87,6 +120,7 @@
 .right_contain{
     width: 20%;
     margin: 1.5rem 1rem 0 0rem;
+    height: 100%;
 }
 
 .right_contain_box1{   
@@ -104,7 +138,7 @@
     font-size:x-large;
 }
 #profile_image{
-    width: 30% ;
+    width: 20% ;
 }
 .logout{
     margin-top: 0.5rem;
@@ -142,8 +176,6 @@
   }
   
   
-  
- 
   
   .flag-image {
     

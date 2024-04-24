@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect,Fragment } from "react";
+import { useContext, useState, useEffect, Fragment } from "react";
 import { UserContext } from "../usercontext";
 import { Navigate } from "react-router-dom";
 import { Navbar } from "../nav_bar/nav2";
@@ -20,8 +20,69 @@ export const Account = () => {
   const [records, setRecords] = useState([]);
   const [startDate, setStartDate] = useState(moment().startOf("day"));
   const [endDate, setEndDate] = useState(moment().endOf("day"));
+  const [PdfFiles, setPrivatePdfFiles] = useState([]);
+  const arrow=" <<< ";
 
   // const { langid } = useContext(LangContext);
+
+  useEffect(() => {
+    // Fetch the uploaded PDF files from the server based on userId
+    const fetchPrivatePdfFiles = async () => {
+      try {
+        const response = await axios.get(`/fetch-private-files/`, {
+          userId: user._id,
+        });
+        if (response.data.success) {
+          const fetchedPdfFiles = response.data.pdfFiles; // Assuming server sends the array of PDF files
+          setPrivatePdfFiles(fetchedPdfFiles);
+        } else {
+          console.error("Failed to fetch private PDF files");
+        }
+      } catch (error) {
+        console.error("Error fetching private PDF files:", error);
+      }
+    };
+
+    fetchPrivatePdfFiles();
+  }, []);
+
+
+  const handleEmbedClick = (privatePdfFile) => {
+    // Convert buffer data to a Uint8Array
+    const uint8Array = new Uint8Array(privatePdfFile.data.data);
+
+    // Create a Blob object from Uint8Array with filename
+    const pdfBlob = new Blob([uint8Array], {
+      type: privatePdfFile.contentType,
+    });
+
+    // Create a URL for the Blob object
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+
+    // Open the PDF file in a new window with filename
+    const newWindow = window.open(pdfUrl, "_blank");
+    if (newWindow) {
+      newWindow.document.title = privatePdfFile.filename;
+    } else {
+      console.error("Failed to open private PDF in new window");
+    }
+  };
+
+  const handledelete = async (filename) => {
+    try {
+     
+      const response = await axios.delete(`/delete-private-pdf`,{file_name:filename});
+      if (response.data.success) {
+        const updatedPdfFiles = PdfFiles.filter(pdfFile => pdfFile.filename !== filename);
+        setPrivatePdfFiles(updatedPdfFiles);
+        alert('Successfully deleted')
+      } else {
+        console.error('Failed to delete PDF file:', response.data.message);
+      }
+    } catch (error) {
+      console.error('Error deleting PDF file:', error.message);
+    }
+  };
   const toggleFilterModal = () => {
     setShowFilterModal(!showFilterModal);
     setIsBackgroundBlurred(!isBackgroundBlurred);
@@ -168,11 +229,10 @@ export const Account = () => {
       console.error("Error fetching records:", error.message);
     }
   };
-  
+
   useEffect(() => {
     fetchRecords();
   }, []);
-  
 
   if (isredirect) {
     return <Navigate to={isredirect} />;
@@ -209,9 +269,7 @@ export const Account = () => {
                     <Fragment key={index}>
                       <div className="grid-item">{record.languageName}</div>
                       <div className="grid-item">{record.marks}</div>
-                      <div className="grid-item">
-                        {record.date}
-                      </div>
+                      <div className="grid-item">{record.date}</div>
                     </Fragment>
                   ))}
                 </div>
@@ -240,13 +298,43 @@ export const Account = () => {
         <div className="right_contain">
           <div className="right_contain_box1">
             <img src={profile} alt="profile" id="profile_image" />
-            <span id="profile_name">{user.name}</span>
-            <span id="profile_mail">{user.email}</span>
+            <span id="profile_name">avishi</span>
+            <span id="profile_mail">hbvjgvg</span>
             <button className="logout" onClick={logout}>
               logout
             </button>
           </div>
-          {/* <div>uploads</div> */}
+          
+          <div className="pdf-container-account">
+            <span className="account_heading"><span id="arrow">{arrow}</span>
+               Your Uploads<span id="arrow">>>></span></span>
+            {console.log(PdfFiles.length)}
+            {PdfFiles.length > 0 ? (
+              <>
+                {PdfFiles.map((pdfFile, index) => (
+                  <div key={index} className="pdf-item">
+                    <embed
+                      className="uploads-pdfs-fetch"
+                      src={URL.createObjectURL(
+                        new Blob([pdfFile.data], { type: pdfFile.contentType })
+                      )}
+                      width="100%"
+                      type="application/pdf"
+                    />
+                    <span
+                      className="embedview"
+                      
+                    >
+                      <span>{pdfFile.filename}</span>
+                      <span id="viewww" onClick={()=>handledelete(pdfFile.filename)}>delete</span>
+                    </span>
+                  </div>
+                ))}
+              </>
+            ) : (
+                <span>You have not uploaded anything yet!!</span>
+            )}
+          </div>
         </div>
       </div>
       {showFilterModal && (
