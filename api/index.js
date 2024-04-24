@@ -70,7 +70,7 @@ app.get('/quizdata/:langid',fetchQuizdata);
 app.post('/scorerecord',recorddata);
 app.get('/fetch-feedback',fetchFeedback);
 app.post("/videos/:langid/:level",addvideo)
-app.get('/record-fetch',fetchrecord)
+app.get('/record-fetch/:userid',fetchrecord)
 app.delete("/videos/:langid/:level",deletevideo)
 app.delete("/delete-private-pdf",privatedelete)
 
