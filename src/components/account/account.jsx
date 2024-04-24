@@ -320,7 +320,7 @@ export const Account = () => {
           
           <div className="pdf-container-account">
             <span className="account_heading"><span id="arrow">{arrow}</span>
-               Your Uploads<span id="arrow">>>></span></span>
+               Your Uploads<span id="arrow">&gt;&gt;&gt;</span></span>
             {console.log(PdfFiles.length)}
             {PdfFiles.length > 0 ? (
               <>
