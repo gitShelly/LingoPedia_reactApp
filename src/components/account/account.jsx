@@ -228,9 +228,8 @@ export const Account = () => {
 
   const fetchRecords = async () => {
     try {
-      const response = await axios.get(`/record-fetch`,{
-        userId: user.id
-      });
+      const response = await axios.get(`/record-fetch/${user._id}`);
+      console.log(response)
       if (response.data.success) {
         setOriginalRecords(response.data.data);
         setRecords(response.data.data);
@@ -281,7 +280,7 @@ export const Account = () => {
                   {records.map((record, index) => (
                     <Fragment key={index}>
                       <div className="grid-item">{record.languageName}</div>
-                      <div className="grid-item">{record.marks}</div>
+                      <div className="grid-item">{record.marks}/7</div>
                       <div className="grid-item">{record.date}</div>
                     </Fragment>
                   ))}
