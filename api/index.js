@@ -9,15 +9,15 @@ require("dotenv").config();
 const { Readable } = require('stream');
 
 
-const RegisterRequest = require("./requests/register")
+const RegisterRequest = require("./requests/register");
 const LoginRequest = require("./requests/login");
 const FeedbackRequest = require("./requests/feedback_req");
-const VideoFetch= require("./requests/videoFetch");
+const VideoFetch = require("./requests/videoFetch");
 const fetchQuizdata = require("./requests/fect_quizdata");
-const recorddata=require("./requests/recordRequest");
-const fetchFeedback=require("./requests/feeback_fetch");
-const addvideo=require("./requests/addvideo");
-const deletevideo=require("./requests/deletevideo");
+const recorddata = require("./requests/recordRequest");
+const fetchFeedback = require("./requests/feeback_fetch");
+const addvideo = require("./requests/addvideo");
+const deletevideo = require("./requests/deletevideo");
 const fetchrecord = require("./requests/recordFetch");
 // const uploadPdf=require('./requests/uploadPdf');
 const fetchpublicpdf=require('./requests/public_fetch');
@@ -28,12 +28,12 @@ const fetchprivatepdf=require("./requests/fetch_private");
 const privatedelete=require("./requests/delete_privatepdf");
 
 
-var bodyParser = require('body-parser');
+var bodyParser = require("body-parser");
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(
@@ -43,7 +43,7 @@ app.use(
   })
 );
 
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(process.env.MONGO_URL);
 const jwtSecret = process.env.JWTSECRET;
 
 const conn = mongoose.connection;
@@ -155,7 +155,7 @@ app.get("/fetch-public-files/:langID",fetchpublicpdf)
 app.get("/fetch-private-files",fetchprivatepdf)
 
 app.post("/logout", (req, res) => {
-  res.cookie("token","").json(true);
+  res.cookie("token", "").json(true);
 });
 
 app.get("/profile", (req, res) => {

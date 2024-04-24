@@ -39,7 +39,7 @@ export const Dashboard = () => {
       <div className="courses_maincontainer">
         <div className="courses_beginner  ">
           <p className="course_heading">
-            Beginner Level<span id="arrow">>>></span>
+            Beginner Level<span id="arrow">&gt;&gt;&gt;</span>
           </p>
           <div className="beginner_videos">
             {videos.beginner.map((link, i) => {
@@ -60,7 +60,7 @@ export const Dashboard = () => {
         </div>
         <div className="courses_beginner">
           <p className="course_heading">
-            Advance Level<span id="arrow">>>></span>
+            Advance Level<span id="arrow">&gt;&gt;&gt;</span>
           </p>
           <div className="beginner_videos">
             {videos.advance.map((link, i) => {
@@ -81,7 +81,7 @@ export const Dashboard = () => {
         </div>
         <div className="courses_beginner">
           <p className="course_heading">
-            Study Notes<span id="arrow">>>></span>
+            Study Notes<span id="arrow">&gt;&gt;&gt;</span>
           </p>
           <UploadNotes lang={langid} />
         </div>

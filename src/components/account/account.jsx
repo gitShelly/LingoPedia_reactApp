@@ -22,6 +22,8 @@ export const Account = () => {
   const [endDate, setEndDate] = useState(moment().endOf("day"));
   const [PdfFiles, setPrivatePdfFiles] = useState([]);
   const arrow=" <<< ";
+  const [originalRecords, setOriginalRecords] = useState([]);
+
 
   // const { langid } = useContext(LangContext);
 
@@ -89,9 +91,10 @@ export const Account = () => {
   };
 
   const applyFilters = () => {
-    const filteredRecords = records.filter((record) => {
+    const filteredRecords = originalRecords.filter((record) => {
+      
       const matchesLanguage = selectedFlag
-        ? record.language === selectedFlag
+        ? record.languageName === selectedFlag
         : true;
 
       const recordDate = moment(record.date);
@@ -101,10 +104,20 @@ export const Account = () => {
         null,
         "[]"
       );
+      
+     if (selectedFlag && (startDate   && endDate)) {
       return matchesLanguage && withinDateRange;
+    } else if (selectedFlag  && !startDate && !endDate) {
+      return matchesLanguage ;
+    } else if ( startDate && endDate) {
+      return withinDateRange;
+    } else {
+      return true;
+    }
     });
 
     setRecords(filteredRecords);
+    toggleFilterModal();
   };
 
   const resetFilters = () => {
@@ -112,6 +125,7 @@ export const Account = () => {
     setStartDate(moment().startOf("day"));
     setEndDate(moment().endOf("day"));
     fetchRecords();
+    toggleFilterModal();
   };
 
   const FilterModal = ({
@@ -142,14 +156,14 @@ export const Account = () => {
             <div
               className="flag_lang"
               key={lang.id}
-              onClick={() => setSelectedFlag(lang.id)}
+              onClick={() => setSelectedFlag(lang.title)}
             >
               <div className="flag-circle">
                 <img src={lang.flag} alt={lang.title} className="flag-image" />
               </div>
               <div
                 className={`language-name ${
-                  selectedFlag === lang.id ? "selected-text" : ""
+                  selectedFlag === lang.title ? "selected-text" : ""
                 }`}
               >
                 {lang.title}
@@ -197,7 +211,7 @@ export const Account = () => {
   const handleSubmitFeedback = async () => {
     try {
       const response = await axios.post("/submit-feedback", {
-        userId: user._id,
+        userId: user.id,
         feedback: feedback,
       });
 
@@ -219,9 +233,11 @@ export const Account = () => {
   };
   const fetchRecords = async () => {
     try {
-      const response = await axios.get("/record-fetch");
+      const response = await axios.get(`/record-fetch/${user.id}`);
       if (response.data.success) {
+        setOriginalRecords(response.data.data);
         setRecords(response.data.data);
+        console.log(response.data.data);
       } else {
         console.error("Failed to fetch records:", response.data.error);
       }
@@ -232,7 +248,7 @@ export const Account = () => {
 
   useEffect(() => {
     fetchRecords();
-  }, []);
+  }, [user.id]);
 
   if (isredirect) {
     return <Navigate to={isredirect} />;
@@ -246,7 +262,7 @@ export const Account = () => {
           <div className="performance">
             <div id="performance_filter">
               <span className="account_heading">
-                Performance Metrics<span id="arrow">>>></span>
+                Performance Metrics<span id="arrow">&gt;&gt;&gt;</span>
               </span>
               <button
                 className="filter-button dialog-box"
@@ -278,7 +294,7 @@ export const Account = () => {
 
             <div className="feedback_box">
               <span className="account_heading">
-                Feedback<span id="arrow">>>></span>
+                Feedback<span id="arrow">&gt;&gt;&gt;</span>
               </span>
               <textarea
                 value={feedback}

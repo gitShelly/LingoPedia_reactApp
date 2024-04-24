@@ -346,11 +346,11 @@ export const Register = () => {
               </div>
               <div className="error">{errorMessage}</div>
               <button className="login__form-button" type="submit">
-                <span class="text ">Register</span>
+                <span className="text ">Register</span>
               </button>
             </form>
             <Link to="/login" className="login_change">
-              ------- <span>Already an Account</span> -------
+              ------- <span>Already have an Account</span> -------
             </Link>
           </div>
         </div>
