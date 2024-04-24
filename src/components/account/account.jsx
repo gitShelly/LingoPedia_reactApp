@@ -1,8 +1,8 @@
 import { useContext, useState, useEffect, Fragment } from "react";
 import { UserContext } from "../usercontext";
-import { Navigate } from "react-router-dom";
+// import { Navigate } from "react-router-dom";
 import { Navbar } from "../nav_bar/nav2";
-import { imports } from "../dashboard_WantToLearn/Images"; // Import the language imports array
+import { imports } from "../dashboard_WantToLearn/Images"; 
 import axios from "axios";
 import moment from "moment";
 
@@ -11,8 +11,7 @@ import progress from "../../Assets/dashboard/progress.jpg";
 import "./account.css";
 
 export const Account = () => {
-  const { user, setuser } = useContext(UserContext);
-  const [isredirect, setisredirect] = useState(null);
+  const { user,handleLogout } = useContext(UserContext);
   const [feedback, setFeedback] = useState("");
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [isBackgroundBlurred, setIsBackgroundBlurred] = useState(false);
@@ -49,26 +48,26 @@ export const Account = () => {
   }, []);
 
 
-  const handleEmbedClick = (privatePdfFile) => {
-    // Convert buffer data to a Uint8Array
-    const uint8Array = new Uint8Array(privatePdfFile.data.data);
+  // const handleEmbedClick = (privatePdfFile) => {
+  //   // Convert buffer data to a Uint8Array
+  //   const uint8Array = new Uint8Array(privatePdfFile.data.data);
 
-    // Create a Blob object from Uint8Array with filename
-    const pdfBlob = new Blob([uint8Array], {
-      type: privatePdfFile.contentType,
-    });
+  //   // Create a Blob object from Uint8Array with filename
+  //   const pdfBlob = new Blob([uint8Array], {
+  //     type: privatePdfFile.contentType,
+  //   });
 
-    // Create a URL for the Blob object
-    const pdfUrl = URL.createObjectURL(pdfBlob);
+  //   // Create a URL for the Blob object
+  //   const pdfUrl = URL.createObjectURL(pdfBlob);
 
-    // Open the PDF file in a new window with filename
-    const newWindow = window.open(pdfUrl, "_blank");
-    if (newWindow) {
-      newWindow.document.title = privatePdfFile.filename;
-    } else {
-      console.error("Failed to open private PDF in new window");
-    }
-  };
+  //   // Open the PDF file in a new window with filename
+  //   const newWindow = window.open(pdfUrl, "_blank");
+  //   if (newWindow) {
+  //     newWindow.document.title = privatePdfFile.filename;
+  //   } else {
+  //     console.error("Failed to open private PDF in new window");
+  //   }
+  // };
 
   const handledelete = async (filename) => {
     try {
@@ -226,14 +225,12 @@ export const Account = () => {
     }
   };
 
-  const logout = async () => {
-    await axios.post("/logout");
-    setisredirect("/");
-    setuser(null);
-  };
+
   const fetchRecords = async () => {
     try {
-      const response = await axios.get(`/record-fetch/${user.id}`);
+      const response = await axios.get(`/record-fetch`,{
+        userId: user.id
+      });
       if (response.data.success) {
         setOriginalRecords(response.data.data);
         setRecords(response.data.data);
@@ -248,11 +245,11 @@ export const Account = () => {
 
   useEffect(() => {
     fetchRecords();
-  }, [user.id]);
+  }, [user._id]);
 
-  if (isredirect) {
-    return <Navigate to={isredirect} />;
-  }
+  // if (isredirect) {
+  //   return <Navigate to={isredirect} />;
+  // }
 
   return (
     <div className={"main_"}>
@@ -316,7 +313,7 @@ export const Account = () => {
             <img src={profile} alt="profile" id="profile_image" />
             <span id="profile_name">avishi</span>
             <span id="profile_mail">hbvjgvg</span>
-            <button className="logout" onClick={logout}>
+            <button className="logout" onClick={handleLogout}>
               logout
             </button>
           </div>

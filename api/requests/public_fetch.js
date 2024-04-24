@@ -19,7 +19,7 @@ const fetchpublicpdf = async (req, res) => {
 
     res.json({ success: true, pdfFiles });
   } catch (error) {
-    console.error("Error fetching PDFs:", error);
+    // console.error("Error fetching PDFs:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

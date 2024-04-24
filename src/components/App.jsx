@@ -26,9 +26,9 @@ axios.defaults.withCredentials = true;
 
 export const App = () => {
   return (
+    <Router>
     <UserContextProvider>
 
-    <Router>
     <LangProvider> 
       <div className="main">
       </div>
@@ -44,7 +44,7 @@ export const App = () => {
         <Route exact path="/account" element={<Account />} />
       </Routes>
     </LangProvider>
-  </Router>
   </UserContextProvider>
+  </Router>
 );
 }

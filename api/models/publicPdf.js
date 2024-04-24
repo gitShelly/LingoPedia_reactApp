@@ -18,5 +18,6 @@ const PublicSchema = new Schema({
     }
 });
 
+PublicSchema.index({ lang: 1 });
 const PublicModel = mongoose.model("PublicPdf", PublicSchema);
 module.exports = PublicModel;

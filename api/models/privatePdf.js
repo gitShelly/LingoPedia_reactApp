@@ -18,5 +18,7 @@ const PrivateSchema = new Schema({
     }
 });
 
+PrivateSchema.index({ lang: 1 });
+
 const PrivateModel = mongoose.model("PrivatePdf", PrivateSchema);
 module.exports = PrivateModel;

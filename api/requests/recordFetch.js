@@ -1,10 +1,10 @@
 const RecordModel = require("../models/marksrecord");
 
 const recordFetch = async (req, res) => {
-  const { userid } = req.params;
+  const { userId } = req.body;
   // console.log(userid);
   try {
-    const records = await RecordModel.find({ userId: userid })
+    const records = await RecordModel.find({ userId: userId })
       .sort({ date: -1 })
       .limit(6);
     res.json({ success: true, data: records });
