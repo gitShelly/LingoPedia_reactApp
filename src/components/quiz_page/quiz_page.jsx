@@ -140,7 +140,7 @@ export const Quizpage = () => {
       const currentDate = new Date().toJSON().slice(0, 10);
       try {
         const response = await axios.post('/scorerecord', {
-          userId: user._id,
+          userId: user.id,
           languageName:languageName,
           marks:score,
           date: currentDate,

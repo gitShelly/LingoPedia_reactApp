@@ -10,7 +10,7 @@ export function UserContextProvider({ children }) {
   const [user, setuser] = useState(storedUser);
   const [ready, setReady] = useState(!!storedUser); 
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!user) { 
@@ -32,7 +32,7 @@ export function UserContextProvider({ children }) {
       await axios.post("/logout");
       localStorage.removeItem("user");
       setuser(null);
-      navigate('/');
+      navigate("/");
     } catch (error) {
       console.error("Error logging out:", error);
     }
