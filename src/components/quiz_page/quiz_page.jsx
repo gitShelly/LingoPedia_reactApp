@@ -20,6 +20,7 @@ export const Quizpage = () => {
   const [width, setwidth] = useState(0);
 
   const { user } = useContext(UserContext);
+  console.log(user._id)
   const languageNames = useMemo(() => ["English", "Japanese", "Italian", "Chinese","Russian","Korean","German","French"],[]);
 
   const arr = [];

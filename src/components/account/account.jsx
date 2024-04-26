@@ -48,26 +48,6 @@ export const Account = () => {
   }, []);
 
 
-  // const handleEmbedClick = (privatePdfFile) => {
-  //   // Convert buffer data to a Uint8Array
-  //   const uint8Array = new Uint8Array(privatePdfFile.data.data);
-
-  //   // Create a Blob object from Uint8Array with filename
-  //   const pdfBlob = new Blob([uint8Array], {
-  //     type: privatePdfFile.contentType,
-  //   });
-
-  //   // Create a URL for the Blob object
-  //   const pdfUrl = URL.createObjectURL(pdfBlob);
-
-  //   // Open the PDF file in a new window with filename
-  //   const newWindow = window.open(pdfUrl, "_blank");
-  //   if (newWindow) {
-  //     newWindow.document.title = privatePdfFile.filename;
-  //   } else {
-  //     console.error("Failed to open private PDF in new window");
-  //   }
-  // };
 
   const handledelete = async (filename) => {
     try {
@@ -144,9 +124,7 @@ export const Account = () => {
         setEndDate(moment(value));
       }
     };
-    const filterData = () => {
-      filterData(startDate, endDate);
-    };
+    
     return (
       <div className="filter-modal dialog-box">
         <h3>Filter by Language</h3>
@@ -228,8 +206,9 @@ export const Account = () => {
 
   const fetchRecords = async () => {
     try {
+      console.log(user._id)
       const response = await axios.get(`/record-fetch/${user._id}`);
-      console.log(response)
+      console.log(response);
       if (response.data.success) {
         setOriginalRecords(response.data.data);
         setRecords(response.data.data);
@@ -241,14 +220,14 @@ export const Account = () => {
       console.error("Error fetching records:", error.message);
     }
   };
-
+  
   useEffect(() => {
-    fetchRecords();
-  }, [user._id]);
+    if (user && user._id) {
+      fetchRecords();
+    }
+  }, [user]);
+  
 
-  // if (isredirect) {
-  //   return <Navigate to={isredirect} />;
-  // }
 
   return (
     <div className={"main_"}>
@@ -310,8 +289,8 @@ export const Account = () => {
         <div className="right_contain">
           <div className="right_contain_box1">
             <img src={profile} alt="profile" id="profile_image" />
-            <span id="profile_name">avishi</span>
-            <span id="profile_mail">hbvjgvg</span>
+            <span id="profile_name">{user.name}</span>
+            <span id="profile_mail">{user.email}</span>
             <button className="logout" onClick={handleLogout}>
               logout
             </button>

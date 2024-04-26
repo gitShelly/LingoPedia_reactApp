@@ -1,6 +1,5 @@
-import { useContext, useState, useEffect } from "react";
-import { UserContext } from "../usercontext";
-// import { UploadNotes } from "../dashboard_WantToLearn/UploadVideo";
+import { useState, useEffect } from "react";
+import { UploadNotes } from "../dashboard_WantToLearn/UploadVideo";
 import { Nav3 } from "../nav_bar/Nav3";
 import axios from "axios";
 import { imports } from "../dashboard_WantToLearn/Images.js";
@@ -9,7 +8,6 @@ import "./account.css";
 import "./admin.css";
 
 export const Admin = () => {
-  const { user } = useContext(UserContext);
   const [feedbacks, setFeedbacks] = useState([]);
   const [videos, setVideos] = useState({ beginner: [], advance: [] });
   const [langid, setLangid] = useState(0);
@@ -32,7 +30,7 @@ export const Admin = () => {
 
   useEffect(() => {
     fetchVideos();
-  }, []);
+  }, [langid]);
 
   useEffect(() => {
     const fetchFeedback = async () => {
@@ -167,11 +165,15 @@ export const Admin = () => {
             </div>
           </div>
 
-          <div>
-            <span className="account_heading">
-              public notes<span id="arrow">&gt;&gt;&gt;</span>
+          <div className="admin_notes_div">
+            <span className="admin_course_heading">
+              Public Notes<span id="arrow">&gt;&gt;&gt;</span>
             </span>
-            {/* <UploadNotes lang={langid} /> */}
+            <div className="admin_notes_content">
+
+            <UploadNotes lang={langid} />
+            </div>
+
           </div>
         </div>
 

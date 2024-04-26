@@ -53,9 +53,10 @@ export const Login = () => {
         password,
       });
       if(data.userType==="admin"){
-          setadmin(true)
+        setadmin(true)
       }
       setuser(data);
+      localStorage.setItem("user", JSON.stringify(data));
       setredirect(true);
     } catch (error) {
       if (error.response && error.response.status === 401) {
