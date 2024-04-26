@@ -48,6 +48,14 @@
     
 }
 
+.left_containadmin::-webkit-scrollbar {
+    width: 1px; 
+  }
+
+.left_containadmin::-webkit-scrollbar-track {
+    background:transparent;
+  }
+
 .feedback_list::-webkit-scrollbar {
     width: 1px; 
   }
@@ -171,4 +179,8 @@
 .admin_notes_div{
     margin-top: 1rem;
     margin-bottom: 1rem;
+}
+
+.admin_notes_content{
+    width: fit-content;
 }

@@ -165,7 +165,7 @@ export const Admin = () => {
             </div>
           </div>
 
-          <div className="admin_notes_div">
+          <div className="admin_courses_beginner admin_notes_div">
             <span className="admin_course_heading">
               Public Notes<span id="arrow">&gt;&gt;&gt;</span>
             </span>

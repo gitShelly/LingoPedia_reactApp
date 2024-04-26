@@ -95,6 +95,7 @@
 
   .uploads-pdfs-fetch{
     overflow: hidden;
+    /* width: 50%; */
   }
 
   .uploads-pdfs-fetch::-webkit-scrollbar {
