@@ -2,7 +2,7 @@ import { useContext, useState, useEffect, Fragment } from "react";
 import { UserContext } from "../usercontext";
 // import { Navigate } from "react-router-dom";
 import { Navbar } from "../nav_bar/nav2";
-import { imports } from "../dashboard_WantToLearn/Images"; 
+import { imports } from "../dashboard_WantToLearn/Images";
 import axios from "axios";
 import moment from "moment";
 
@@ -11,7 +11,7 @@ import progress from "../../Assets/dashboard/progress.jpg";
 import "./account.css";
 
 export const Account = () => {
-  const { user,handleLogout } = useContext(UserContext);
+  const { user, handleLogout } = useContext(UserContext);
   const [feedback, setFeedback] = useState("");
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [isBackgroundBlurred, setIsBackgroundBlurred] = useState(false);
@@ -20,9 +20,8 @@ export const Account = () => {
   const [startDate, setStartDate] = useState(moment().startOf("day"));
   const [endDate, setEndDate] = useState(moment().endOf("day"));
   const [PdfFiles, setPrivatePdfFiles] = useState([]);
-  const arrow=" <<< ";
+  const arrow = " <<< ";
   const [originalRecords, setOriginalRecords] = useState([]);
-
 
   // const { langid } = useContext(LangContext);
 
@@ -47,7 +46,6 @@ export const Account = () => {
     fetchPrivatePdfFiles();
   }, []);
 
-
   // const handleEmbedClick = (privatePdfFile) => {
   //   // Convert buffer data to a Uint8Array
   //   const uint8Array = new Uint8Array(privatePdfFile.data.data);
@@ -71,17 +69,20 @@ export const Account = () => {
 
   const handledelete = async (filename) => {
     try {
-     
-      const response = await axios.delete(`/delete-private-pdf`,{file_name:filename});
+      const response = await axios.delete(`/delete-private-pdf`, {
+        file_name: filename,
+      });
       if (response.data.success) {
-        const updatedPdfFiles = PdfFiles.filter(pdfFile => pdfFile.filename !== filename);
+        const updatedPdfFiles = PdfFiles.filter(
+          (pdfFile) => pdfFile.filename !== filename
+        );
         setPrivatePdfFiles(updatedPdfFiles);
-        alert('Successfully deleted')
+        alert("Successfully deleted");
       } else {
-        console.error('Failed to delete PDF file:', response.data.message);
+        console.error("Failed to delete PDF file:", response.data.message);
       }
     } catch (error) {
-      console.error('Error deleting PDF file:', error.message);
+      console.error("Error deleting PDF file:", error.message);
     }
   };
   const toggleFilterModal = () => {
@@ -91,7 +92,6 @@ export const Account = () => {
 
   const applyFilters = () => {
     const filteredRecords = originalRecords.filter((record) => {
-      
       const matchesLanguage = selectedFlag
         ? record.languageName === selectedFlag
         : true;
@@ -103,16 +103,16 @@ export const Account = () => {
         null,
         "[]"
       );
-      
-     if (selectedFlag && (startDate   && endDate)) {
-      return matchesLanguage && withinDateRange;
-    } else if (selectedFlag  && !startDate && !endDate) {
-      return matchesLanguage ;
-    } else if ( startDate && endDate) {
-      return withinDateRange;
-    } else {
-      return true;
-    }
+
+      if (selectedFlag && startDate && endDate) {
+        return matchesLanguage && withinDateRange;
+      } else if (selectedFlag && !startDate && !endDate) {
+        return matchesLanguage;
+      } else if (startDate && endDate) {
+        return withinDateRange;
+      } else {
+        return true;
+      }
     });
 
     setRecords(filteredRecords);
@@ -225,11 +225,10 @@ export const Account = () => {
     }
   };
 
-
   const fetchRecords = async () => {
     try {
-      const response = await axios.get(`/record-fetch`,{
-        userId: user.id
+      const response = await axios.get(`/record-fetch/${user.id}`, {
+        userId: user.id,
       });
       if (response.data.success) {
         setOriginalRecords(response.data.data);
@@ -245,7 +244,7 @@ export const Account = () => {
 
   useEffect(() => {
     fetchRecords();
-  }, [user._id]);
+  }, [user.id]);
 
   // if (isredirect) {
   //   return <Navigate to={isredirect} />;
@@ -261,10 +260,7 @@ export const Account = () => {
               <span className="account_heading">
                 Performance Metrics<span id="arrow">&gt;&gt;&gt;</span>
               </span>
-              <button
-                className="filter-button dialog-box"
-                onClick={toggleFilterModal}
-              >
+              <button className="filter-button" onClick={toggleFilterModal}>
                 Filters
               </button>
             </div>
@@ -273,13 +269,16 @@ export const Account = () => {
                 <img src={progress} alt="" id="progress" />
               </div>
               <div className="record">
-                <div className="grid-container">
+                <div className="headingggg">
                   <div className="grid_heading">Language</div>
-                  <div className="grid_heading">Marks Obtained</div>
+                  <div className="grid_heading" id="marks_obt">
+                    Marks Obtained
+                  </div>
                   <div className="grid_heading">Attempted Time and Date</div>
-
+                </div>
+                <div className="grid-container">
                   {records.map((record, index) => (
-                    <Fragment key={index}>
+                    <Fragment className="frag" key={index}>
                       <div className="grid-item">{record.languageName}</div>
                       <div className="grid-item">{record.marks}</div>
                       <div className="grid-item">{record.date}</div>
@@ -311,16 +310,18 @@ export const Account = () => {
         <div className="right_contain">
           <div className="right_contain_box1">
             <img src={profile} alt="profile" id="profile_image" />
-            <span id="profile_name">avishi</span>
-            <span id="profile_mail">hbvjgvg</span>
+            <span id="profile_name">{user.name}</span>
+            <span id="profile_mail">{user.email}</span>
             <button className="logout" onClick={handleLogout}>
               logout
             </button>
           </div>
-          
+
           <div className="pdf-container-account">
-            <span className="account_heading"><span id="arrow">{arrow}</span>
-               Your Uploads<span id="arrow">&gt;&gt;&gt;</span></span>
+            <span className="account_heading" id="pdf-title">
+              <span id="arrow">{arrow}</span>
+              Your Uploads<span id="arrow">&gt;&gt;&gt;</span>
+            </span>
             {console.log(PdfFiles.length)}
             {PdfFiles.length > 0 ? (
               <>
@@ -334,18 +335,41 @@ export const Account = () => {
                       width="100%"
                       type="application/pdf"
                     />
-                    <span
-                      className="embedview"
-                      
-                    >
-                      <span>{pdfFile.filename}</span>
-                      <span id="viewww" onClick={()=>handledelete(pdfFile.filename)}>delete</span>
+                    <span className="embedview">
+                      <span id="file-name">{pdfFile.filename}</span>
+                      <div className="dropdown">
+                        <div className="dropdown-trigger">
+                          <span
+                            className="dots"
+                            aria-label="more options"
+                            aria-haspopup="true"
+                            aria-controls={`dropdown-menu-${index}`}
+                          >
+                            ...
+                          </span>
+                        </div>
+                        <div
+                          className="dropdown-menu"
+                          id={`dropdown-menu-${index}`}
+                          role="menu"
+                        >
+                          <div className="dropdown-content">
+                            <button
+                              href="#"
+                              className="dropdown-item"
+                              // onClick={() => handledelete(pdfFile.filename)}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </span>
                   </div>
                 ))}
               </>
             ) : (
-                <span>You have not uploaded anything yet!!</span>
+              <span>You have not uploaded anything yet!!</span>
             )}
           </div>
         </div>

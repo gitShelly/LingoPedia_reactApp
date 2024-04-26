@@ -20,6 +20,7 @@ export const Quizpage = () => {
   const [width, setwidth] = useState(0);
 
   const { user } = useContext(UserContext);
+  console.log(user._id)
   const languageNames = useMemo(() => ["English", "Japanese", "Italian", "Chinese","Russian","Korean","German","French"],[]);
 
   const arr = [];
@@ -139,7 +140,7 @@ export const Quizpage = () => {
       const currentDate = new Date().toJSON().slice(0, 10);
       try {
         const response = await axios.post('/scorerecord', {
-          userId: user._id,
+          userId: user.id,
           languageName:languageName,
           marks:score,
           date: currentDate,

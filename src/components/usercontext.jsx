@@ -8,23 +8,23 @@ export function UserContextProvider({ children }) {
   const [user, setuser] = useState(null);
   const [ready, setready] = useState(false);
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!user) {
       axios.get("/profile").then(({ data }) => {
         setuser(data);
+        console.log(data);
         setready(true);
       });
     }
-  });
+  }, []);
 
   const handleLogout = async () => {
     try {
-
       await axios.post("/logout");
       setuser(null);
-      navigate('/');
+      navigate("/");
     } catch (error) {
       console.error("Error logging out:", error);
     }
