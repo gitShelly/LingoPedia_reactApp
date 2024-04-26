@@ -46,26 +46,6 @@ export const Account = () => {
     fetchPrivatePdfFiles();
   }, []);
 
-  // const handleEmbedClick = (privatePdfFile) => {
-  //   // Convert buffer data to a Uint8Array
-  //   const uint8Array = new Uint8Array(privatePdfFile.data.data);
-
-  //   // Create a Blob object from Uint8Array with filename
-  //   const pdfBlob = new Blob([uint8Array], {
-  //     type: privatePdfFile.contentType,
-  //   });
-
-  //   // Create a URL for the Blob object
-  //   const pdfUrl = URL.createObjectURL(pdfBlob);
-
-  //   // Open the PDF file in a new window with filename
-  //   const newWindow = window.open(pdfUrl, "_blank");
-  //   if (newWindow) {
-  //     newWindow.document.title = privatePdfFile.filename;
-  //   } else {
-  //     console.error("Failed to open private PDF in new window");
-  //   }
-  // };
 
   const handledelete = async (filename) => {
     try {
@@ -144,9 +124,7 @@ export const Account = () => {
         setEndDate(moment(value));
       }
     };
-    const filterData = () => {
-      filterData(startDate, endDate);
-    };
+    
     return (
       <div className="filter-modal dialog-box">
         <h3>Filter by Language</h3>
@@ -241,14 +219,14 @@ export const Account = () => {
       console.error("Error fetching records:", error.message);
     }
   };
-
+  
   useEffect(() => {
-    fetchRecords();
-  }, [user.id]);
+    if (user && user.id) {
+      fetchRecords();
+    }
+  }, [user]);
+  
 
-  // if (isredirect) {
-  //   return <Navigate to={isredirect} />;
-  // }
 
   return (
     <div className={"main_"}>
@@ -280,7 +258,7 @@ export const Account = () => {
                   {records.map((record, index) => (
                     <Fragment className="frag" key={index}>
                       <div className="grid-item">{record.languageName}</div>
-                      <div className="grid-item">{record.marks}</div>
+                      <div className="grid-item">{record.marks}/7</div>
                       <div className="grid-item">{record.date}</div>
                     </Fragment>
                   ))}

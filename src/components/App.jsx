@@ -27,8 +27,8 @@ axios.defaults.withCredentials = true;
 export const App = () => {
   return (
     <Router>
-    <UserContextProvider>
 
+    <UserContextProvider>
     <LangProvider> 
       <div className="main">
       </div>
