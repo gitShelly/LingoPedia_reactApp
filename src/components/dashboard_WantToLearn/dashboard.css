@@ -95,6 +95,8 @@
 
   .uploads-pdfs-fetch{
     overflow: hidden;
+    margin: 0;
+    padding: 0;
     /* width: 50%; */
   }
 
@@ -105,3 +107,18 @@
   .uploads-pdfs-fetch::-webkit-scrollbar-track {
     background:transparent;
   }
+  #no-pdf{
+    color: #f7a60f;
+    display: flex;
+    
+    align-items: center;
+    height: 3rem;
+    font-size: 1.2rem;
+    font-weight: normal;
+    width: 100%;
+    
+  }
+  #pdf-div{
+    width: 50%;
+  }
+ 

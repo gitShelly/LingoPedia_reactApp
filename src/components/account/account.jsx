@@ -34,6 +34,7 @@ export const Account = () => {
         });
         if (response.data.success) {
           const fetchedPdfFiles = response.data.pdfFiles; // Assuming server sends the array of PDF files
+          console.log(fetchedPdfFiles);
           setPrivatePdfFiles(fetchedPdfFiles);
         } else {
           console.error("Failed to fetch private PDF files");
@@ -46,10 +47,9 @@ export const Account = () => {
     fetchPrivatePdfFiles();
   }, []);
 
-
   const handledelete = async (filename) => {
     try {
-      const response = await axios.delete(`/delete-private-pdf`, {
+      const response = await axios.delete(`/delete-private-pdf/`, {
         file_name: filename,
       });
       if (response.data.success) {
@@ -124,7 +124,7 @@ export const Account = () => {
         setEndDate(moment(value));
       }
     };
-    
+
     return (
       <div className="filter-modal dialog-box">
         <h3>Filter by Language</h3>
@@ -205,8 +205,8 @@ export const Account = () => {
 
   const fetchRecords = async () => {
     try {
-      const response = await axios.get(`/record-fetch/${user.id}`, {
-        userId: user.id,
+      const response = await axios.get(`/record-fetch/${user._id}`, {
+        userId: user._id,
       });
       if (response.data.success) {
         setOriginalRecords(response.data.data);
@@ -219,14 +219,12 @@ export const Account = () => {
       console.error("Error fetching records:", error.message);
     }
   };
-  
+
   useEffect(() => {
-    if (user && user.id) {
+    if (user && user._id) {
       fetchRecords();
     }
   }, [user]);
-  
-
 
   return (
     <div className={"main_"}>
@@ -255,13 +253,17 @@ export const Account = () => {
                   <div className="grid_heading">Attempted Time and Date</div>
                 </div>
                 <div className="grid-container">
-                  {records.map((record, index) => (
-                    <Fragment className="frag" key={index}>
-                      <div className="grid-item">{record.languageName}</div>
-                      <div className="grid-item">{record.marks}/7</div>
-                      <div className="grid-item">{record.date}</div>
-                    </Fragment>
-                  ))}
+                  {records.length === 0 ? (
+                    <div className="no-records">No record history</div>
+                  ) : (
+                    records.map((record, index) => (
+                      <Fragment key={index}>
+                        <div className="grid-item">{record.languageName}</div>
+                        <div className="grid-item">{record.marks}/7</div>
+                        <div className="grid-item">{record.date}</div>
+                      </Fragment>
+                    ))
+                  )}
                 </div>
               </div>
             </div>
@@ -335,7 +337,7 @@ export const Account = () => {
                             <button
                               href="#"
                               className="dropdown-item"
-                              // onClick={() => handledelete(pdfFile.filename)}
+                              onClick={() => handledelete(pdfFile.filename)}
                             >
                               Delete
                             </button>

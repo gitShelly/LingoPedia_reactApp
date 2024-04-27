@@ -69,7 +69,7 @@ export const UploadNotes = (props) => {
           </div>
         ))
       ) : (
-        <div>No PDF files available</div>
+        <div id="no-pdf">No PDF files available</div>
       )}
     </div>
   );
