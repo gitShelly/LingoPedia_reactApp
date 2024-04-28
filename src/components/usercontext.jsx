@@ -25,7 +25,7 @@ export function UserContextProvider({ children }) {
           setReady(true); 
         });
     }
-  }, []);
+  });
 
   const handleLogout = async () => {
     try {
