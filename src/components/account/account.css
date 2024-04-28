@@ -1,6 +1,6 @@
 .main_{
     width: 100%;
-    height: 100vh;
+    height: 112vh;
     display: flex;
     flex-direction: column;
     background-color:#f8f1e4 ;
@@ -21,7 +21,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  height: 65%;
+  height: 70vh;
   overflow-y: auto;
   position: relative;
   align-items: center;
@@ -31,7 +31,7 @@
   margin-bottom: 1rem;
   width: 80%;
   margin: auto;
-  
+  margin-bottom: 1rem;
   
 }
 
@@ -51,7 +51,7 @@
     width: 80%;
     display: flex;
     flex-direction: column;
-    height: 95%;
+    height: 97vh;
     background-color:white;
 }
 
@@ -336,11 +336,6 @@
 .date-filters label{
     color:rgba(10, 60, 95, 1);
 }
-/* Dropdown Styles */
-/* .dropdown {
-  /* position: absolute; */
-  /* display: inline-block; */
- 
 
 .dropdown-content {
   display: none;
@@ -354,14 +349,12 @@
 }
 
 .dropdown-content button {
-  color: black;
-  /* border-radius: 10px; */
-  /* padding: 12px 16px; */
+  color:rgba(10, 60, 95, 1) ;
   text-decoration: none;
   outline: none;
   border: none;
   width: 100%;
-  /* display: block; */
+  border-radius: 0.2rem;
   
 }
 
@@ -379,6 +372,7 @@
   display: block;
   align-items: center;
   left: 75%;
+
 }
 
 .dropdown-trigger {
@@ -391,10 +385,6 @@
 }
 .dropdown-item{
  font-size: small;
- 
-  /* left:45%; */
-  
-
 }
 #file-name{
   font-size: small;
@@ -406,8 +396,6 @@
   justify-content: center;
   align-items: center;
   font-size: 1.2rem;
-  /* margin-bottom: 1rem; */
-  margin-top: 1rem;
   color: rgba(10, 60, 95, 1);
 }
 .no-records{

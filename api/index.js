@@ -78,7 +78,8 @@ app.delete("/delete-private-pdf",privatedelete)
 
 app.post("/submit-file",multer().none(),async (req, res) => {
   try {
-      const { userId, lang, pdf, isPublic ,file_name} = req.body;
+      const { userId, lang, pdf, isPublic ,file_name,isPrivate} = req.body;
+      console.log( userId, lang, pdf, isPublic ,file_name,isPrivate)
       const filename =file_name;
 
       const readableStream = new Readable();
@@ -113,18 +114,20 @@ app.post("/submit-file",multer().none(),async (req, res) => {
       uploadStream.on("finish", async () => {
           console.log("File uploaded successfully");
 
-          // Save to private schema
-          const privateFile = new PrivateModel({
-              userId,
-              lang,
-              pdf: {
-                  filename,
-                  contentType: "application/pdf",
-                  data: pdf
-              }
-          });
+          if(isPrivate==="true"||isPrivate==true){
+            
+            const privateFile = new PrivateModel({
+                userId,
+                lang,
+                pdf: {
+                    filename,
+                    contentType: "application/pdf",
+                    data: pdf
+                }
+            });
+            await privateFile.save();
+          }
 
-          await privateFile.save();
 
           if (isPublic===true||isPublic==="true") {
               // Save to public schema
@@ -147,6 +150,40 @@ app.post("/submit-file",multer().none(),async (req, res) => {
       res.status(500).json({ success: false, error: "Failed to submit file" });
   }
 })
+
+app.post("/makePublic",async (req, res) => {
+  try {
+    const { file_name } = req.body;
+
+    // Check if the document already exists in the public model
+    const existingPublicPDF = await PublicModel.findOne({ "pdf.filename": file_name });
+    if (existingPublicPDF) {
+      return res.json({ success: false, error: "Document already exists in public model" });
+    }
+    // If the document doesn't exist in the public model, create a new one
+    if (!existingPublicPDF) {
+      // Find the document in the private model
+      const privatePDF = await PrivateModel.findOne({ "pdf.filename": file_name });
+
+    
+      if (privatePDF) {
+        const { userId, lang, pdf } = privatePDF;
+        console.log(userId, lang, pdf);
+        const publicPDF = new PublicModel({ userId, lang, pdf });
+        await publicPDF.save();
+        return res.json({ success: true, message: "Document uploaded to public list" });
+      } else {
+        console.log("Document not found in private model");
+      }
+    } else {
+      return res.status(500).json({ success: false, error: "Server error" });
+    }
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).json({ success: false, error: "Server error" });
+  }})
 
 
 

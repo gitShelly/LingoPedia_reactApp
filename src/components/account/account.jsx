@@ -26,7 +26,6 @@ export const Account = () => {
   // const { langid } = useContext(LangContext);
 
   useEffect(() => {
-    // Fetch the uploaded PDF files from the server based on userId
     const fetchPrivatePdfFiles = async () => {
       try {
         const response = await axios.get(`/fetch-private-files/`, {
@@ -45,7 +44,24 @@ export const Account = () => {
     };
 
     fetchPrivatePdfFiles();
-  }, []);
+  },[user]);
+
+  const handlepublicupdate=async(filename)=>{
+    try {
+      const response = await axios.post("/makePublic", {
+        file_name: filename,
+      });
+  
+      if (response.data.success) {
+        alert("Document made public successfully");
+      } else {
+
+        alert("Error making public PDF file: " + response.data.error);
+      }
+    } catch (error) {
+      alert("Error making public PDF file: " + error.message);
+    }
+  }
 
   const handledelete = async (filename) => {
     try {
@@ -205,9 +221,9 @@ export const Account = () => {
 
   const fetchRecords = async () => {
     try {
-      const response = await axios.get(`/record-fetch/${user._id}`, {
-        userId: user._id,
-      });
+      console.log(user._id)
+      const response = await axios.get(`/record-fetch/${user._id}`);
+      console.log(response);
       if (response.data.success) {
         setOriginalRecords(response.data.data);
         setRecords(response.data.data);
@@ -316,6 +332,11 @@ export const Account = () => {
                       type="application/pdf"
                     />
                     <span className="embedview">
+                    <img
+                  src={imports[pdfFile.lang].flag}
+                  alt="flag"
+                  style={{ width:"10%", height:"10%", marginRight:"1px" }}
+                />
                       <span id="file-name">{pdfFile.filename}</span>
                       <div className="dropdown">
                         <div className="dropdown-trigger">
@@ -335,7 +356,11 @@ export const Account = () => {
                         >
                           <div className="dropdown-content">
                             <button
-                              href="#"
+                            className="dropdown-item"
+                            onClick={() => handlepublicupdate(pdfFile.filename)}>
+                             make it public
+                            </button>
+                            <button
                               className="dropdown-item"
                               onClick={() => handledelete(pdfFile.filename)}
                             >

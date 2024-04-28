@@ -2,7 +2,7 @@ const PrivateModel = require("../models/privatePdf");
 
 const fetchPrivatePdf = async (req, res) => {
   try {
-    const { userId } = req.body // Assuming userId is passed in the request parameters
+    const { userId } = req.body 
     const documents = await PrivateModel.find( userId );
 
     if (!documents || documents.length === 0) {
@@ -12,7 +12,8 @@ const fetchPrivatePdf = async (req, res) => {
     const pdfFiles = documents.map(doc => ({
       filename: doc.pdf.filename,
       contentType: doc.pdf.contentType,
-      data: doc.pdf.data
+      data: doc.pdf.data,
+      lang: doc.lang,
     }));
 
     res.json({ success: true, pdfFiles });

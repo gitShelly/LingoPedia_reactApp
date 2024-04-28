@@ -3,6 +3,7 @@ import { UploadNotes } from "../dashboard_WantToLearn/UploadVideo";
 import { Nav3 } from "../nav_bar/Nav3";
 import axios from "axios";
 import { imports } from "../dashboard_WantToLearn/Images.js";
+import { Link } from "react-router-dom";
 
 import "./account.css";
 import "./admin.css";
@@ -167,7 +168,7 @@ export const Admin = () => {
 
           <div className="admin_courses_beginner admin_notes_div">
             <span className="admin_course_heading">
-              Public Notes<span id="arrow">&gt;&gt;&gt;</span>
+              Public Notes <Link to="/upload">upload</Link><span id="arrow">&gt;&gt;&gt;</span>
             </span>
             <div className="admin_notes_content">
 
