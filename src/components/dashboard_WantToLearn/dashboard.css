@@ -83,18 +83,26 @@
   .embedview{
     display: flex;
     justify-content: space-between;
+    /* width: 50%; */
     color:rgb(18, 60, 90);
     margin-right: 0.5rem;
     
   }
   #viewww{
     text-decoration:underline;
+    /* margin-left: 3rem; */
     color:#f7a60f;
     cursor: pointer;
+  }
+  #viewww:hover{
+    color:rgba(10, 60, 95, 1);
+    
   }
 
   .uploads-pdfs-fetch{
     overflow: hidden;
+    margin: 0;
+    padding: 0;
     /* width: 50%; */
   }
 
@@ -105,3 +113,22 @@
   .uploads-pdfs-fetch::-webkit-scrollbar-track {
     background:transparent;
   }
+  #no-pdf{
+    color: #f7a60f;
+    display: flex;
+    
+    align-items: center;
+    height: 3rem;
+    font-size: 1.2rem;
+    font-weight: normal;
+    width: 100%;
+    
+  }
+  #pdf-div{
+    width: 50%;
+  }
+#file-name{
+  font: 1rem;
+  /* width:80%; */
+}
+ 

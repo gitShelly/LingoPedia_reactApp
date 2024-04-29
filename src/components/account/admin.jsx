@@ -168,11 +168,15 @@ export const Admin = () => {
 
           <div className="admin_courses_beginner admin_notes_div">
             <span className="admin_course_heading">
-              Public Notes <Link to="/upload">upload</Link><span id="arrow">&gt;&gt;&gt;</span>
+              Public Notes<span id="arrow">&gt;&gt;&gt;</span>
             </span>
             <div className="admin_notes_content">
 
             <UploadNotes lang={langid} />
+            </div>
+            <div className="add-pdf">
+            <button className="add-btn"><Link to="/upload"><span id="add-text">Add pdf</span></Link></button>
+
             </div>
 
           </div>

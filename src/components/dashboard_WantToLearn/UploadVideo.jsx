@@ -13,8 +13,9 @@ export const UploadNotes = (props) => {
       try {
         const response = await axios.get(`/fetch-public-files/${langid}`);
         if (response.data.success) {
-          const fetchedPdfFiles = response.data.pdfFiles; // Assuming server sends the array of PDF files
-          setPdfFiles(fetchedPdfFiles);
+          const fetchPdfFiles = response.data.pdfFiles; // Assuming server sends the array of PDF files
+          setPdfFiles(fetchPdfFiles);
+          console.log(response.data.pdfFiles)
         } else {
           console.error("Failed to fetch PDF files");
         }
@@ -58,18 +59,19 @@ export const UploadNotes = (props) => {
           <div key={index} className="pdf-container">
             <embed
               className="uploads-pdfs-fetch"
-              src={URL.createObjectURL(new Blob([pdfFile.data], { type: pdfFile.contentType }))}
-              width="100%"
-              height="100%"
+              src={URL.createObjectURL(new Blob([pdfFile.data.data], { type: pdfFile.contentType }))}
+              
+              // width="50%"
+              // height="100%"
               type="application/pdf"
             />
             <span className="embedview" onClick={() => handleEmbedClick(pdfFile)}>
-             <span>{pdfFile.filename}</span><span id="viewww">view</span> 
+             <span id="file-name">{pdfFile.filename}</span><span id="viewww">Delete</span> 
             </span>
           </div>
         ))
       ) : (
-        <div>No PDF files available</div>
+        <div id="no-pdf">No PDF files available</div>
       )}
     </div>
   );
