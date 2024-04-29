@@ -7,6 +7,8 @@ const recordFetch = async (req, res) => {
     const records = await RecordModel.find({ userId: userid })
       .sort({ date: -1 })
       .limit();
+
+    
     res.json({ success: true, data: records });
   } catch (err) {
     console.error(err);

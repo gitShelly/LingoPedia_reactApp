@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext,useMemo } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import axios from "axios";
 import "./quiz_page.css";
 import "./quiz_progress.css";
@@ -14,14 +14,25 @@ export const Quizpage = () => {
   const [currentstate, setcurrentstate] = useState(0);
   const [buttonText, setButtonText] = useState("Next");
   const [score, setScore] = useState(0);
-  const [clicked, setclickedOption] = useState(null); 
+  const [clicked, setclickedOption] = useState(null);
   const [circle] = useState(7);
   const [quizData, setQuizData] = useState([]);
   const [width, setwidth] = useState(0);
 
   const { user } = useContext(UserContext);
-  console.log(user._id)
-  const languageNames = useMemo(() => ["English", "Japanese", "Italian", "Chinese","Russian","Korean","German","French"],[]);
+  const languageNames = useMemo(
+    () => [
+      "English",
+      "Japanese",
+      "Italian",
+      "Chinese",
+      "Russian",
+      "Korean",
+      "German",
+      "French",
+    ],
+    []
+  );
 
   const arr = [];
   for (let i = 0; i < circle; i++) {
@@ -61,7 +72,7 @@ export const Quizpage = () => {
 
     if (currentstate < quizData.length - 2) {
       setcurrentstate(currentstate + 1);
-      setclickedOption(null); 
+      setclickedOption(null);
     } else if (currentstate < quizData.length - 1) {
       setButtonText("Results");
       setclickedOption(null);
@@ -72,11 +83,11 @@ export const Quizpage = () => {
     BackprogressbarChange();
     if (currentstate > 0) {
       setcurrentstate(currentstate - 1);
-      setScore(score-1)
+      setScore(score - 1);
       if (clicked !== null) {
-        updateScore(); 
+        updateScore();
       }
-      setclickedOption(null); 
+      setclickedOption(null);
     }
     if (currentstate === 1) {
       setButtonText("Next");
@@ -96,10 +107,9 @@ export const Quizpage = () => {
     setButtonText("Next");
   };
 
-
   const shuffleArray = (array) => {
     const slicedArray = array.length > 7 ? array.slice(0, 7) : array;
-    console.log(slicedArray.length)
+    console.log(slicedArray.length);
     let currentIndex = array.length;
     let temporaryValue, randomIndex;
 
@@ -111,21 +121,22 @@ export const Quizpage = () => {
       slicedArray[currentIndex] = slicedArray[randomIndex];
       slicedArray[randomIndex] = temporaryValue;
     }
-  
+
     return slicedArray;
   };
 
   useEffect(() => {
-
     const fetchQuizData = async () => {
       try {
-        const response = await fetch(`http://localhost:4000/quizdata/${currentLang}`);
+        const response = await fetch(
+          `http://localhost:4000/quizdata/${currentLang}`
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch quiz data");
         }
         const data = await response.json();
         const shuffledQuestions = shuffleArray(data.questions);
-        console.log(shuffledQuestions)
+        console.log(shuffledQuestions);
         setQuizData(shuffledQuestions);
       } catch (error) {
         console.error("Error fetching quiz data:", error.message);
@@ -137,26 +148,33 @@ export const Quizpage = () => {
   useEffect(() => {
     const saveResultToMongoDB = async () => {
       const languageName = languageNames[langid];
-      const currentDate = new Date().toJSON().slice(0, 10);
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0"); // Adding 1 to month because it's zero-based
+      const day = String(date.getDate()).padStart(2, "0");
+
+      const formattedDate = `${year}-${month}-${day}`;
+
+
       try {
-        const response = await axios.post('/scorerecord', {
+
+        const response = await axios.post("/scorerecord", {
           userId: user._id,
-          languageName:languageName,
-          marks:score,
-          date: currentDate,
+          languageName: languageName,
+          marks: score,
+          date: formattedDate,
         });
-  
+
         console.log("Record saved to MongoDB:", response.data);
       } catch (error) {
         console.error("Error saving record:", error);
       }
     };
-  
+
     if (currentstate === 7) {
       saveResultToMongoDB();
     }
   }, [currentstate, langid, languageNames, user, score]);
-
 
   if (currentstate === 7) {
     return <Result resl={score} tryAgain={resetAll} />;
@@ -174,27 +192,23 @@ export const Quizpage = () => {
               {arr}
             </div>
           </div>
-          <div className="question_box">
-          {quizData[currentstate]?.question}
-          </div>
+          <div className="question_box">{quizData[currentstate]?.question}</div>
           <div className="option-container">
-            {quizData[currentstate]?.options.map(
-              (option, i) => {
-                return (
-                  <button
-                    className={`option-btn btn_options ${
-                      clicked === i + 1 ? "checked" : ""
-                    }`}
-                    key={i}
-                    onClick={() => {
-                      setclickedOption(i + 1);
-                    }}
-                  >
-                    {option}
-                  </button>
-                );
-              }
-            )}
+            {quizData[currentstate]?.options.map((option, i) => {
+              return (
+                <button
+                  className={`option-btn btn_options ${
+                    clicked === i + 1 ? "checked" : ""
+                  }`}
+                  key={i}
+                  onClick={() => {
+                    setclickedOption(i + 1);
+                  }}
+                >
+                  {option}
+                </button>
+              );
+            })}
           </div>
           <div className="movement_btn">
             <button
@@ -219,4 +233,3 @@ export const Quizpage = () => {
     );
   }
 };
-

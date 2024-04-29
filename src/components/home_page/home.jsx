@@ -13,7 +13,7 @@ import { ImFacebook2 } from "react-icons/im";
 
 export const Home = () => {
   const observer = useRef(null);
-
+  localStorage.removeItem("user");
   useEffect(() => {
     observer.current = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {

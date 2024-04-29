@@ -5,7 +5,7 @@ const RecordRequest = async (req, res) => {
 
     const { userId, languageName, marks, date } =  req.body;
 
-    if (!userId || !languageName || !marks) {
+    if (!userId || !languageName || !marks|| !date) {
       return res.status(400).json({
         success: false,
         error: "Required fields are missing: userId, languageName, marks"

@@ -24,7 +24,7 @@ export const Upload = () => {
     try {
       const formData = new FormData();
       formData.append("userId", user._id);
-
+  
       if (user.userType === "admin") {
         formData.append("lang", selectedLanguage);
       } else {
@@ -39,24 +39,28 @@ export const Upload = () => {
         formData.append("isPrivate", true);
       }
       formData.append("file_name", files[0].name);
-
+  
       const response = await axios.post("/submit-file", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-
-      if (response.data.success) {
+  
+      if (response.status === 200) {
         alert("File uploaded successfully");
         setFiles(null);
+      } else if (response.status === 400) {
+        alert("File already exists in the requested language");
+      } else if (response.status === 500) {
+        alert("Server error: Failed to upload file");
       } else {
-        alert("Failed to upload file");
+        alert("Unknown error occurred");
       }
     } catch (error) {
-      console.error("Error uploading file:", error.message);
       alert("Failed to upload file");
     }
   };
+  
 
   const handleDragOver = (event) => {
     event.preventDefault();

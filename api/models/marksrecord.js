@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const recordSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User", // Reference to User model
+    ref: "User",
     required: true,
   },
   languageName: {
@@ -20,6 +20,7 @@ const recordSchema = new mongoose.Schema({
   },
 });
 
+recordSchema.index({ languageName: 1, date: 1 });
 const   RecordModel = mongoose.model("Record", recordSchema);
 
 module.exports = RecordModel;

@@ -26,32 +26,32 @@ export const Account = () => {
   const [selectedLanguage, setSelectedLanguage] = useState(null);
 
   // const { langid } = useContext(LangContext);
+  const fetchPrivatePdfFiles = async () => {
+    try {
+      const response = await axios.get(`/fetch-private-files/${user._id}`);
+      if (response.data.success) {
+        const fetchedPdfFiles = response.data.pdfFiles; 
+        setPrivatePdfFiles(fetchedPdfFiles);
+      } else {
+        console.error("Failed to fetch private PDF files");
+      }
+    } catch (error) {
+      console.error("Error fetching private PDF files:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchPrivatePdfFiles = async () => {
-      try {
-        const response = await axios.get(`/fetch-private-files/`, {
-          userId: user._id,
-        });
-        if (response.data.success) {
-          const fetchedPdfFiles = response.data.pdfFiles; // Assuming server sends the array of PDF files
-          console.log(fetchedPdfFiles);
-          setPrivatePdfFiles(fetchedPdfFiles);
-        } else {
-          console.error("Failed to fetch private PDF files");
-        }
-      } catch (error) {
-        console.error("Error fetching private PDF files:", error);
-      }
-    };
-
-    fetchPrivatePdfFiles();
+    if (user && user._id) {
+      fetchPrivatePdfFiles();
+    }
   }, [user]);
+  
 
   const handlepublicupdate = async (filename) => {
     try {
       const response = await axios.post("/makePublic", {
         file_name: filename,
+        
       });
 
       if (response.data.success) {
@@ -66,8 +66,9 @@ export const Account = () => {
 
   const handledelete = async (filename) => {
     try {
-      const response = await axios.delete(`/delete-private-pdf/`, {
+      const response = await axios.delete(`/delete-pdf`, {
         file_name: filename,
+        isAdmin:false
       });
       if (response.data.success) {
         const updatedPdfFiles = PdfFiles.filter(
@@ -89,9 +90,7 @@ export const Account = () => {
 
   const applyFilters = () => {
     const filteredRecords = originalRecords.filter((record) => {
-      const matchesLanguage = selectedFlag
-        ? record.languageName === selectedFlag
-        : true;
+    const matchesLanguage = selectedFlag? record.languageName === selectedFlag : true;
 
       const recordDate = moment(record.date);
       const withinDateRange = recordDate.isBetween(
@@ -236,7 +235,6 @@ export const Account = () => {
 
   const fetchRecords = async () => {
     try {
-      console.log(user._id);
       const response = await axios.get(`/record-fetch/${user._id}`);
       console.log(response);
       if (response.data.success) {
@@ -256,6 +254,9 @@ export const Account = () => {
       fetchRecords();
     }
   }, [user]);
+  
+
+
 
   return (
     <div className={"main_"}>

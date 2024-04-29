@@ -5,13 +5,14 @@ import axios from "axios";
 export const UserContext = createContext({});
 
 export function UserContextProvider({ children }) {
-  const storedUser = JSON.parse(localStorage.getItem("user"));
 
+  const storedUser = JSON.parse(localStorage.getItem("user"));
   const [user, setuser] = useState(storedUser);
   const [ready, setReady] = useState(!!storedUser); 
 
   const navigate = useNavigate();
-
+  console.log(storedUser)
+  
   useEffect(() => {
     if (!user) { 
       axios.get("/profile")
@@ -25,7 +26,7 @@ export function UserContextProvider({ children }) {
           setReady(true); 
         });
     }
-  });
+  },[]);
 
   const handleLogout = async () => {
     try {
