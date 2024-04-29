@@ -185,11 +185,36 @@
 .admin_notes_div{
     margin-top: 2rem;
     margin-bottom: 1rem;
-    width:50%
+    width:100%
 }
 
 .admin_notes_content{
-    width: 50%;
+    width: 100%;
+    
+}
+.add-btn{
+    padding: 0 0.5rem;
+    height: 2.5rem;
+    color: white;
+    background-color: #F7A60F;
+    border-radius:30px;
+    width: 8vw;
+    border: none;
+    margin-bottom: 1rem;
+    /* margin-left: 1rem; */
+    
+}
+
+.add-pdf{
+    margin-top: 1rem;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    /* width: 50%; */
+}
+.add-btn:hover{
+    transform: scale(1.1);
+    background-color:rgba(10, 60, 95, 1); 
 }
 .operation_btn:hover{
     transform: scale(1.1);
@@ -205,4 +230,7 @@
     font-size:1.3rem;
     font-weight: normal;
     width:100%;
+}
+#add-text{
+    color: white;
 }

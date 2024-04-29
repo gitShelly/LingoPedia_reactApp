@@ -83,14 +83,20 @@
   .embedview{
     display: flex;
     justify-content: space-between;
+    /* width: 50%; */
     color:rgb(18, 60, 90);
     margin-right: 0.5rem;
     
   }
   #viewww{
     text-decoration:underline;
+    /* margin-left: 3rem; */
     color:#f7a60f;
     cursor: pointer;
+  }
+  #viewww:hover{
+    color:rgba(10, 60, 95, 1);
+    
   }
 
   .uploads-pdfs-fetch{
@@ -121,4 +127,8 @@
   #pdf-div{
     width: 50%;
   }
+#file-name{
+  font: 1rem;
+  /* width:80%; */
+}
  

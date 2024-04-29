@@ -17,11 +17,13 @@ export const Account = () => {
   const [isBackgroundBlurred, setIsBackgroundBlurred] = useState(false);
   const [selectedFlag, setSelectedFlag] = useState(null);
   const [records, setRecords] = useState([]);
-  const [startDate, setStartDate] = useState(moment().startOf("day"));
-  const [endDate, setEndDate] = useState(moment().endOf("day"));
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [PdfFiles, setPrivatePdfFiles] = useState([]);
   const arrow = " <<< ";
   const [originalRecords, setOriginalRecords] = useState([]);
+  const [showLanguageFilter, setShowLanguageFilter] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState(null);
 
   // const { langid } = useContext(LangContext);
 
@@ -44,24 +46,23 @@ export const Account = () => {
     };
 
     fetchPrivatePdfFiles();
-  },[user]);
+  }, [user]);
 
-  const handlepublicupdate=async(filename)=>{
+  const handlepublicupdate = async (filename) => {
     try {
       const response = await axios.post("/makePublic", {
         file_name: filename,
       });
-  
+
       if (response.data.success) {
         alert("Document made public successfully");
       } else {
-
         alert("Error making public PDF file: " + response.data.error);
       }
     } catch (error) {
       alert("Error making public PDF file: " + error.message);
     }
-  }
+  };
 
   const handledelete = async (filename) => {
     try {
@@ -117,8 +118,8 @@ export const Account = () => {
 
   const resetFilters = () => {
     setSelectedFlag(null);
-    setStartDate(moment().startOf("day"));
-    setEndDate(moment().endOf("day"));
+    setStartDate(null);
+    setEndDate(null);
     fetchRecords();
     toggleFilterModal();
   };
@@ -135,9 +136,9 @@ export const Account = () => {
     const handleDate = (event) => {
       const { name, value } = event.target;
       if (name === "startDate") {
-        setStartDate(moment(value));
+        setStartDate(value ? moment(value) : null);
       } else if (name === "endDate") {
-        setEndDate(moment(value));
+        setEndDate(value ? moment(value) : null);
       }
     };
 
@@ -171,7 +172,7 @@ export const Account = () => {
           <input
             type="date"
             name="startDate"
-            value={startDate.format("YYYY-MM-DD")}
+            value={startDate ? startDate.format("YYYY-MM-DD") : ""}
             placeholder="From"
             onChange={handleDate}
             className="startDate"
@@ -181,12 +182,12 @@ export const Account = () => {
             type="date"
             name="endDate"
             placeholder="To"
-            value={endDate.format("YYYY-MM-DD")}
+            value={endDate ? endDate.format("YYYY-MM-DD") : ""}
             onChange={handleDate}
             className="endDate"
           />
         </div>
-        {/* Apply and Reset buttons */}
+        
         <div className="filter-btn">
           <button onClick={applyFilters}>Apply Filters</button>
           <button className="reset" onClick={resetFilters}>
@@ -195,6 +196,20 @@ export const Account = () => {
         </div>
       </div>
     );
+  };
+  const toggleLanguageFilter = () => {
+    setShowLanguageFilter(!showLanguageFilter);
+  };
+
+  const handleLanguageClick = (language) => {
+    setSelectedLanguage(language);
+    toggleLanguageFilter(); // Close the language filter dialog after
+  };
+
+  const handleShowAll = () => {
+    setSelectedLanguage(null);
+    toggleLanguageFilter(); // Reset selected language to display all PDFs
+    // Implement logic to show all PDFs
   };
 
   const handleFeedbackChange = (event) => {
@@ -221,7 +236,7 @@ export const Account = () => {
 
   const fetchRecords = async () => {
     try {
-      console.log(user._id)
+      console.log(user._id);
       const response = await axios.get(`/record-fetch/${user._id}`);
       console.log(response);
       if (response.data.success) {
@@ -314,64 +329,109 @@ export const Account = () => {
           </div>
 
           <div className="pdf-container-account">
-            <span className="account_heading" id="pdf-title">
+            <div className="account_heading" id="pdf-title">
               <span id="arrow">{arrow}</span>
-              Your Uploads<span id="arrow">&gt;&gt;&gt;</span>
-            </span>
+              <span id="pdf-heading">Your Uploads</span>
+              {/* <span id="arrow">&gt;&gt;&gt;</span> */}
+              <div className="pdf-filter" >
+                <span id="all">
+                  {selectedLanguage ? selectedLanguage : "All"}
+                </span>
+                <button className="pdf-filter-btn" onClick={toggleLanguageFilter}>&#9660;</button>
+              </div>
+              {showLanguageFilter && (
+                <div className="language-filter-dialog">
+                  {imports.map((lang) => (
+                    <div
+                      className="flag_lang"
+                      key={lang.id}
+                      onClick={() => handleLanguageClick(lang.title)}
+                    >
+                      <img
+                        src={lang.flag}
+                        alt={lang.title}
+                        className="flag-image"
+                      />
+                    </div>
+                  ))}
+                  <button className="clear-btn" onClick={handleShowAll}>
+                    Clear
+                  </button>
+                </div>
+              )}
+            </div>
             {console.log(PdfFiles.length)}
             {PdfFiles.length > 0 ? (
               <>
-                {PdfFiles.map((pdfFile, index) => (
-                  <div key={index} className="pdf-item">
-                    <embed
-                      className="uploads-pdfs-fetch"
-                      src={URL.createObjectURL(
-                        new Blob([pdfFile.data], { type: pdfFile.contentType })
-                      )}
-                      width="100%"
-                      type="application/pdf"
-                    />
-                    <span className="embedview">
-                    <img
-                  src={imports[pdfFile.lang].flag}
-                  alt="flag"
-                  style={{ width:"10%", height:"10%", marginRight:"1px" }}
-                />
-                      <span id="file-name">{pdfFile.filename}</span>
-                      <div className="dropdown">
-                        <div className="dropdown-trigger">
-                          <span
-                            className="dots"
-                            aria-label="more options"
-                            aria-haspopup="true"
-                            aria-controls={`dropdown-menu-${index}`}
-                          >
-                            ...
-                          </span>
-                        </div>
-                        <div
-                          className="dropdown-menu"
-                          id={`dropdown-menu-${index}`}
-                          role="menu"
-                        >
-                          <div className="dropdown-content">
-                            <button
-                            className="dropdown-item"
-                            onClick={() => handlepublicupdate(pdfFile.filename)}>
-                             make it public
-                            </button>
-                            <button
-                              className="dropdown-item"
-                              onClick={() => handledelete(pdfFile.filename)}
+                {PdfFiles.map((pdfFile, index) => {
+                  if (
+                    !selectedLanguage ||
+                    imports[pdfFile.lang].title === selectedLanguage
+                  ) {
+                    return (
+                      <div key={index} className="pdf-item">
+                        <embed
+                          className="uploads-pdfs-fetch"
+                          src={URL.createObjectURL(
+                            new Blob([pdfFile.data], {
+                              type: pdfFile.contentType,
+                            })
+                          )}
+                          width="100%"
+                          type="application/pdf"
+                        />
+                        <span className="embedview">
+                          <img
+                            src={imports[pdfFile.lang].flag}
+                            alt="flag"
+                            style={{
+                              width: "10%",
+                              height: "10%",
+                              marginRight: "1px",
+                            }}
+                          />
+                          <span id="file-name">{pdfFile.filename}</span>
+                          <div className="dropdown">
+                            <div className="dropdown-trigger">
+                              <span
+                                className="dots"
+                                aria-label="more options"
+                                aria-haspopup="true"
+                                aria-controls={`dropdown-menu-${index}`}
+                              >
+                                ...
+                              </span>
+                            </div>
+                            <div
+                              className="dropdown-menu"
+                              id={`dropdown-menu-${index}`}
+                              role="menu"
                             >
-                              Delete
-                            </button>
+                              <div className="dropdown-content">
+                                <button
+                                  className="dropdown-item"
+                                  onClick={() =>
+                                    handlepublicupdate(pdfFile.filename)
+                                  }
+                                >
+                                  make it public
+                                </button>
+                                <button
+                                  className="dropdown-item"
+                                  onClick={() => handledelete(pdfFile.filename)}
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </div>
                           </div>
-                        </div>
+                        </span>
                       </div>
-                    </span>
-                  </div>
-                ))}
+                    );
+                  } else {
+                    return null;
+                  }
+                })}
               </>
             ) : (
               <span>You have not uploaded anything yet!!</span>
