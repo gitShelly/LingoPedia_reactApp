@@ -16,6 +16,8 @@ export const Admin = () => {
   const [url, setUrl] = useState("");
   const [message, setMessage] = useState("");
 
+  console.log(imports[langid].title)
+
   const fetchVideos = async () => {
     try {
       const response = await fetch(`http://localhost:4000/videos/${langid}`);
@@ -172,7 +174,7 @@ export const Admin = () => {
             </span>
             <div className="admin_notes_content">
 
-            <UploadNotes lang={langid} />
+            <UploadNotes lang={langid} langname={imports[langid].title}/>
             </div>
             <div className="add-pdf">
             <button className="add-btn"><Link to="/upload"><span id="add-text">Add pdf</span></Link></button>

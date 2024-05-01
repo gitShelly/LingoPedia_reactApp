@@ -25,12 +25,12 @@ export const Account = () => {
   const [showLanguageFilter, setShowLanguageFilter] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(null);
 
-  // const { langid } = useContext(LangContext);
   const fetchPrivatePdfFiles = async () => {
     try {
       const response = await axios.get(`/fetch-private-files/${user._id}`);
       if (response.data.success) {
-        const fetchedPdfFiles = response.data.pdfFiles; 
+        console.log("hello");
+        const fetchedPdfFiles = response.data.pdfFiles;
         setPrivatePdfFiles(fetchedPdfFiles);
       } else {
         console.error("Failed to fetch private PDF files");
@@ -45,13 +45,12 @@ export const Account = () => {
       fetchPrivatePdfFiles();
     }
   }, [user]);
-  
 
-  const handlepublicupdate = async (filename) => {
+  const handlepublicupdate = async (filename, lang) => {
     try {
       const response = await axios.post("/makePublic", {
         file_name: filename,
-        
+        lang: lang,
       });
 
       if (response.data.success) {
@@ -68,7 +67,7 @@ export const Account = () => {
     try {
       const response = await axios.delete(`/delete-pdf`, {
         file_name: filename,
-        isAdmin:false
+        isAdmin: false,
       });
       if (response.data.success) {
         const updatedPdfFiles = PdfFiles.filter(
@@ -90,7 +89,9 @@ export const Account = () => {
 
   const applyFilters = () => {
     const filteredRecords = originalRecords.filter((record) => {
-    const matchesLanguage = selectedFlag? record.languageName === selectedFlag : true;
+      const matchesLanguage = selectedFlag
+        ? record.languageName === selectedFlag
+        : true;
 
       const recordDate = moment(record.date);
       const withinDateRange = recordDate.isBetween(
@@ -186,7 +187,7 @@ export const Account = () => {
             className="endDate"
           />
         </div>
-        
+
         <div className="filter-btn">
           <button onClick={applyFilters}>Apply Filters</button>
           <button className="reset" onClick={resetFilters}>
@@ -207,8 +208,7 @@ export const Account = () => {
 
   const handleShowAll = () => {
     setSelectedLanguage(null);
-    toggleLanguageFilter(); // Reset selected language to display all PDFs
-    // Implement logic to show all PDFs
+    toggleLanguageFilter();
   };
 
   const handleFeedbackChange = (event) => {
@@ -254,9 +254,6 @@ export const Account = () => {
       fetchRecords();
     }
   }, [user]);
-  
-
-
 
   return (
     <div className={"main_"}>
@@ -333,12 +330,16 @@ export const Account = () => {
             <div className="account_heading" id="pdf-title">
               <span id="arrow">{arrow}</span>
               <span id="pdf-heading">Your Uploads</span>
-              {/* <span id="arrow">&gt;&gt;&gt;</span> */}
-              <div className="pdf-filter" >
+              <div className="pdf-filter">
                 <span id="all">
                   {selectedLanguage ? selectedLanguage : "All"}
                 </span>
-                <button className="pdf-filter-btn" onClick={toggleLanguageFilter}>&#9660;</button>
+                <button
+                  className="pdf-filter-btn"
+                  onClick={toggleLanguageFilter}
+                >
+                  &#9660;
+                </button>
               </div>
               {showLanguageFilter && (
                 <div className="language-filter-dialog">
@@ -361,7 +362,6 @@ export const Account = () => {
                 </div>
               )}
             </div>
-            {console.log(PdfFiles.length)}
             {PdfFiles.length > 0 ? (
               <>
                 {PdfFiles.map((pdfFile, index) => {
@@ -412,7 +412,10 @@ export const Account = () => {
                                 <button
                                   className="dropdown-item"
                                   onClick={() =>
-                                    handlepublicupdate(pdfFile.filename)
+                                    handlepublicupdate(
+                                      pdfFile.filename,
+                                      pdfFile.lang
+                                    )
                                   }
                                 >
                                   make it public
@@ -435,7 +438,9 @@ export const Account = () => {
                 })}
               </>
             ) : (
-              <span>You have not uploaded anything yet!!</span>
+              <div className="pdf-item">
+                <span>You have not uploaded anything yet!!</span>
+              </div>
             )}
           </div>
         </div>

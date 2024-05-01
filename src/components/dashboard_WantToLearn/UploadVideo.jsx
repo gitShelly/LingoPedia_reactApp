@@ -5,6 +5,7 @@ import { UserContext } from "../usercontext";
 
 export const UploadNotes = (props) => {
   const [pdfFiles, setPdfFiles] = useState([]);
+  const [sumPDF, setsum_of_pdf] = useState();
   const { user } = useContext(UserContext);
 
   const langid=props.lang
@@ -16,6 +17,8 @@ export const UploadNotes = (props) => {
         const response = await axios.get(`/fetch-public-files/${langid}`);
         if (response.data.success) {
           const fetchedPdfFiles = response.data.pdfFiles; 
+          const sum_of_pdfs=response.data.lang_pdf_sum;
+          setsum_of_pdf(sum_of_pdfs);
           setPdfFiles(fetchedPdfFiles);
         } else {
           console.error("Failed to fetch PDF files");
@@ -70,16 +73,19 @@ export const UploadNotes = (props) => {
 
 
   return (
+    <>
+
+      {(user && user.userType === "admin") ? (
+    <div className="sum_of_pdf">
+      <span>Total {props.langname} PDFs: {sumPDF}</span>
+    </div>
+  ) : null}
     <div className="uploads">
       {pdfFiles.length > 0 ? (
         pdfFiles.map((pdfFile, index) => (
           <div key={index} className="pdf-container">
             <embed
               className="uploads-pdfs-fetch"
-              src={URL.createObjectURL(new Blob([pdfFile.data.data], { type: pdfFile.contentType }))}
-              
-              // width="50%"
-              // height="100%"
               src={URL.createObjectURL(new Blob([pdfFile.data], { type: pdfFile.contentType }))}
               // width="100%"
               // height="100%"
@@ -87,7 +93,7 @@ export const UploadNotes = (props) => {
               onClick={() => handleEmbedClick(pdfFile)}
             />
             <span className="embedview" >
-             <span onClick={() => handleEmbedClick(pdfFile)}id= "pdf-click">{pdfFile.filename}</span>{(user.userType==="admin")?<span id="viewww" onClick={()=>handledelete(pdfFile.filename)}>Delete</span>:null} 
+             <span onClick={() => handleEmbedClick(pdfFile)}id= "pdf-click">{pdfFile.filename}</span>{(user && user.userType==="admin")?<span id="viewww" onClick={()=>handledelete(pdfFile.filename)}>Delete</span>:null} 
             </span>
           </div>
         ))
@@ -95,5 +101,6 @@ export const UploadNotes = (props) => {
         <div id="no-pdf">No PDF files available</div>
       )}
     </div>
+    </>
   );
 };

@@ -83,7 +83,7 @@
   .embedview{
     display: flex;
     justify-content: space-between;
-    /* width: 50%; */
+    /* width: fit-content; */
     color:rgb(18, 60, 90);
     margin-right: 0.5rem;
     
@@ -103,6 +103,7 @@
     overflow: hidden;
     margin: 0;
     padding: 0;
+    width:fit-content
     /* width: 50%; */
   }
 
@@ -130,5 +131,9 @@
 #file-name{
   font: 1rem;
   /* width:80%; */
+}
+
+.sum_of_pdf{
+  margin-bottom: 0.5rem;
 }
  

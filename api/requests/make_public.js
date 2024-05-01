@@ -3,11 +3,12 @@ const PublicModel = require("../models/publicPdf");
 
 const makePublic = async (req, res) => {
   try {
-    const { file_name } = req.body;
-
+    const { file_name ,lang } = req.body;
     const existingPublicPDF = await PublicModel.findOne({
       "pdf.filename": file_name,
+      "lang": lang
     });
+    
     if (existingPublicPDF) {
       return res.json({
         success: false,
@@ -18,11 +19,12 @@ const makePublic = async (req, res) => {
     if (!existingPublicPDF) {
       const privatePDF = await PrivateModel.findOne({
         "pdf.filename": file_name,
+        "lang": lang
       });
 
       if (privatePDF) {
         const { userId, lang, pdf } = privatePDF;
-        console.log(userId, lang, pdf);
+        console.log(privatePDF);
         const publicPDF = new PublicModel({ userId, lang, pdf });
         await publicPDF.save();
         return res.json({

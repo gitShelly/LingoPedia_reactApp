@@ -3,7 +3,7 @@ const PrivateModel = require("../models/privatePdf");
 const fetchPrivatePdf = async (req, res) => {
   try {
     const { userid } = req.params;
-    const documents = await PrivateModel.find( userid );
+    const documents = await PrivateModel.find( {userId:userid} );
 
     if (!documents || documents.length === 0) {
       return res.status(404).json({ error: "PDFs not found for this user" });
