@@ -31,7 +31,7 @@
   margin-bottom: 1rem;
   width: 80%;
   margin: auto;
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
   
 }
 
@@ -493,4 +493,16 @@ margin-left: 0.5rem;
 }
 .clear-btn:hover{
   background-color: rgba(10, 60, 95, 1);
+}
+#no-lang-pdf{
+  margin-top: 1rem;
+  font-size: 1.3rem;
+  text-align: center;
+  color: #F7A60F;
+}
+.no-pdf{
+  margin-top: 1rem;
+  font-size: 1.3rem;
+  text-align: center;
+  color: #F7A60F;
 }

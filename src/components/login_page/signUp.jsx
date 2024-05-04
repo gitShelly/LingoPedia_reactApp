@@ -108,7 +108,7 @@ export const Register = () => {
           password,
           userType
         });
-        // alert("You are now a registered user.");
+        alert("Registeration successful. Please login to continue.");
         setRedirect(true);
       } catch (error) {
         if (error.response && error.response.status === 400) {

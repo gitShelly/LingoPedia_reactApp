@@ -334,12 +334,14 @@ export const Account = () => {
                 <span id="all">
                   {selectedLanguage ? selectedLanguage : "All"}
                 </span>
-                <button
-                  className="pdf-filter-btn"
-                  onClick={toggleLanguageFilter}
-                >
-                  &#9660;
-                </button>
+                  {PdfFiles.length >0 &&(
+                  <button
+                    className="pdf-filter-btn"
+                    onClick={toggleLanguageFilter}
+                  >
+                    &#9660;
+                  </button>
+                  )}
               </div>
               {showLanguageFilter && (
                 <div className="language-filter-dialog">
@@ -436,9 +438,16 @@ export const Account = () => {
                     return null;
                   }
                 })}
+                {selectedLanguage  && !PdfFiles.some(
+                  (pdfFile) => imports[pdfFile.lang].title === selectedLanguage
+                ) && (
+                  <span id="no-lang-pdf">
+                    No files uploaded for this language.
+                  </span>
+                )}
               </>
             ) : (
-              <div className="pdf-item">
+              <div className="no-pdf">
                 <span>You have not uploaded anything yet!!</span>
               </div>
             )}

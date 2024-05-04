@@ -58,6 +58,7 @@ export const Login = () => {
       setuser(data);
       localStorage.setItem("user", JSON.stringify(data));
       setredirect(true);
+      alert("You are logged in successfully")
     } catch (error) {
       if (error.response && error.response.status === 401) {
         setErrorMessage("Invalid login credentials");
