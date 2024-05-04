@@ -65,9 +65,13 @@ export const Account = () => {
 
   const handledelete = async (filename) => {
     try {
+      console.log(user.userType);
       const response = await axios.delete(`/delete-pdf`, {
-        file_name: filename,
-        isAdmin: false,
+        data: {
+          file_name: filename,
+          isAdmin: user.userType,
+          userid: user._id,
+        },
       });
       if (response.data.success) {
         const updatedPdfFiles = PdfFiles.filter(
