@@ -5,21 +5,26 @@ import { UserContext } from "../usercontext";
 
 export const UploadNotes = (props) => {
   const [pdfFiles, setPdfFiles] = useState([]);
-  const [sumPDF, setsum_of_pdf] = useState();
+  const [sumPDF, setsum_of_pdf] = useState(0);
   const { user } = useContext(UserContext);
 
   const langid=props.lang
 
   useEffect(() => {
-    // Fetch the uploaded PDF files from the server based on langid
+
     const fetchPdfFiles = async () => {
       try {
         const response = await axios.get(`/fetch-public-files/${langid}`);
+    
         if (response.data.success) {
           const fetchedPdfFiles = response.data.pdfFiles; 
-          const sum_of_pdfs=response.data.lang_pdf_sum;
+          const sum_of_pdfs = response.data.lang_pdf_sum;
           setsum_of_pdf(sum_of_pdfs);
-          setPdfFiles(fetchedPdfFiles);
+          if (fetchedPdfFiles !== null) {
+            setPdfFiles(fetchedPdfFiles);
+          } else {
+            setPdfFiles([]);
+          }
         } else {
           console.error("Failed to fetch PDF files");
         }
@@ -27,10 +32,13 @@ export const UploadNotes = (props) => {
         console.error("Error fetching PDF files:", error);
       }
     };
+    
+    
 
     fetchPdfFiles();
   }, [langid]);
 
+  console.log(pdfFiles)
   const handledelete = async (filename) => {
     try {
       const response = await axios.delete(`/delete-pdf`, {
@@ -44,6 +52,7 @@ export const UploadNotes = (props) => {
         setPdfFiles(updatedPdfFiles);
         alert("Successfully deleted");
       } else {
+
         console.error("Failed to delete PDF file:", response.data.message);
       }
     } catch (error) {
